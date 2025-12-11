@@ -1,5 +1,6 @@
 import { createContext } from "@daily-bot/api/context";
 import { appRouter } from "@daily-bot/api/routers/index";
+import { auth } from "@daily-bot/auth";
 import { env } from "@daily-bot/env/server";
 import { cors } from "@elysiajs/cors";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
@@ -34,8 +35,17 @@ const app = new Elysia()
     cors({
       origin: env.CORS_ORIGINS,
       methods: ["GET", "POST", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
     })
   )
+  .all("/auth/*", (context) => {
+    const { request, status } = context;
+    if (["POST", "GET"].includes(request.method)) {
+      return auth.handler(request);
+    }
+    return status(405);
+  })
   .all("/rpc*", async (context) => {
     const { response } = await rpcHandler.handle(context.request, {
       prefix: "/rpc",

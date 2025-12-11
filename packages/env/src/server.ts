@@ -12,6 +12,9 @@ export const env = createEnv({
       .string()
       .transform((val) => val.split(",").map((s) => s.trim())),
     DATABASE_URL: z.url(),
+    AUTH_SECRET: z.string(),
+    DISCORD_TOKEN: z.string(),
+    DISCORD_CLIENT_ID: z.string(),
   },
   runtimeEnv: process.env,
 });

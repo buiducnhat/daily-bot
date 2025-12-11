@@ -1,5 +1,4 @@
-/** biome-ignore-all lint/suspicious/useAwait: <> */
-/** biome-ignore-all lint/correctness/noUnusedFunctionParameters: <> */
+import { auth } from "@daily-bot/auth";
 import type { Context as ElysiaContext } from "elysia";
 
 export type CreateContextOptions = {
@@ -7,11 +6,11 @@ export type CreateContextOptions = {
 };
 
 export async function createContext({ context }: CreateContextOptions) {
-  // biome-ignore lint/nursery/noUnusedExpressions: <>
-  context;
-  // No auth configured
+  const session = await auth.api.getSession({
+    headers: context.request.headers,
+  });
   return {
-    session: null,
+    session,
   };
 }
 

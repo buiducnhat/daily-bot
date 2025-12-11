@@ -53,3 +53,5 @@ temp
 /.agent/rules/ruler.md
 /.agent/rules/ruler.md.bak
 # END Ruler Generated Files
+
+local.db

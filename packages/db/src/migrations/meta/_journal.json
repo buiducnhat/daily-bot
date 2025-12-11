@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1765436625127,
+      "tag": "0000_fat_night_thrasher",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1765443297117,
+      "tag": "0001_quiet_vivisector",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1765469591386,
+      "tag": "0002_white_warpath",
+      "breakpoints": true
+    }
+  ]
+}

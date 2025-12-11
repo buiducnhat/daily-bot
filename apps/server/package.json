@@ -17,6 +17,7 @@
     "@orpc/zod": "catalog:",
     "zod": "catalog:",
     "@daily-bot/api": "workspace:*",
+    "@daily-bot/auth": "workspace:*",
     "@daily-bot/db": "workspace:*",
     "@daily-bot/env": "workspace:*"
   },
