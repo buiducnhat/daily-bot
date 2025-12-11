@@ -11,9 +11,9 @@
   "runtime": "bun",
   "frontend": [],
   "addons": [
-    "ruler",
     "turborepo",
-    "ultracite"
+    "ultracite",
+    "ruler"
   ],
   "examples": [],
   "auth": "none",

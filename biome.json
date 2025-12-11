@@ -22,7 +22,40 @@
       "!**/.source"
     ]
   },
-  "extends": [
-    "ultracite/core"
-  ]
+  "extends": ["ultracite/core", "ultracite/react"],
+  "linter": {
+    "rules": {
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noBitwiseOperators": "off",
+        "noArrayIndexKey": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off",
+        "noBarrelFile": "off",
+        "useTopLevelRegex": "off"
+      },
+      "style": {
+        "noNestedTernary": "off",
+        "noEnum": "off",
+        "noParameterAssign": "off",
+        "useDefaultSwitchClause": "off",
+        "useFilenamingConvention": "off"
+      },
+      "a11y": {
+        "useSemanticElements": "off",
+        "noSvgWithoutTitle": "off"
+      },
+      "correctness": {
+        "noNestedComponentDefinitions": "off"
+      },
+      "nursery": {
+        "noShadow": "off",
+        "noLeakedRender": "off"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off"
+      }
+    }
+  }
 }

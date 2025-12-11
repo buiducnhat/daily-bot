@@ -18,16 +18,16 @@
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.8",
-    "@daily-bot/config": "workspace:*"
+    "@daily-bot/config": "workspace:*",
+    "@daily-bot/env": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.0",
-    "@libsql/client": "^0.14.0",
+    "@libsql/client": "^0.15.15",
     "libsql": "^0.5.22",
-    "dotenv": "catalog:",
     "zod": "catalog:"
   }
 }

@@ -1,56 +1,57 @@
-import "dotenv/config";
-import { Elysia } from "elysia";
+import { createContext } from "@daily-bot/api/context";
+import { appRouter } from "@daily-bot/api/routers/index";
+import { env } from "@daily-bot/env/server";
 import { cors } from "@elysiajs/cors";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
-import { RPCHandler } from "@orpc/server/fetch";
 import { onError } from "@orpc/server";
-import { appRouter } from "@daily-bot/api/routers/index";
-import { createContext } from "@daily-bot/api/context";
+import { RPCHandler } from "@orpc/server/fetch";
+import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
+import { Elysia } from "elysia";
 
 const rpcHandler = new RPCHandler(appRouter, {
-	interceptors: [
-		onError((error) => {
-			console.error(error);
-		}),
-	],
+  interceptors: [
+    onError((error) => {
+      console.error(error);
+    }),
+  ],
 });
 const apiHandler = new OpenAPIHandler(appRouter, {
-	plugins: [
-		new OpenAPIReferencePlugin({
-			schemaConverters: [new ZodToJsonSchemaConverter()],
-		}),
-	],
-	interceptors: [
-		onError((error) => {
-			console.error(error);
-		}),
-	],
+  plugins: [
+    new OpenAPIReferencePlugin({
+      schemaConverters: [new ZodToJsonSchemaConverter()],
+    }),
+  ],
+  interceptors: [
+    onError((error) => {
+      console.error(error);
+    }),
+  ],
 });
 
 const app = new Elysia()
-	.use(
-		cors({
-			origin: process.env.CORS_ORIGIN || "",
-			methods: ["GET", "POST", "OPTIONS"],
-		}),
-	)
-	.all("/rpc*", async (context) => {
-		const { response } = await rpcHandler.handle(context.request, {
-			prefix: "/rpc",
-			context: await createContext({ context }),
-		});
-		return response ?? new Response("Not Found", { status: 404 });
-	})
-	.all("/api*", async (context) => {
-		const { response } = await apiHandler.handle(context.request, {
-			prefix: "/api-reference",
-			context: await createContext({ context }),
-		});
-		return response ?? new Response("Not Found", { status: 404 });
-	})
-	.get("/", () => "OK")
-	.listen(3000, () => {
-		console.log("Server is running on http://localhost:3000");
-	});
+  .use(
+    cors({
+      origin: env.CORS_ORIGINS,
+      methods: ["GET", "POST", "OPTIONS"],
+    })
+  )
+  .all("/rpc*", async (context) => {
+    const { response } = await rpcHandler.handle(context.request, {
+      prefix: "/rpc",
+      context: await createContext({ context }),
+    });
+    return response ?? new Response("Not Found", { status: 404 });
+  })
+  .all("/api*", async (context) => {
+    const { response } = await apiHandler.handle(context.request, {
+      prefix: "/api-reference",
+      context: await createContext({ context }),
+    });
+    return response ?? new Response("Not Found", { status: 404 });
+  })
+  .get("/", () => "OK");
+
+app.listen(env.SERVER_PORT, () => {
+  console.log(`Server is running on ${env.SERVER_URL}`);
+});
