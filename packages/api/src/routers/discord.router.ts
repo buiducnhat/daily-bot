@@ -95,7 +95,7 @@ export const discordRouter = {
         where: (orgs, { eq }) => eq(orgs.id, input.organizationId),
       });
 
-      if (!(org && org.discordGuildId)) {
+      if (!org?.discordGuildId) {
         throw new Error("Organization not connected to Discord");
       }
 
@@ -126,7 +126,7 @@ export const discordRouter = {
         where: (orgs, { eq }) => eq(orgs.id, input.organizationId),
       });
 
-      if (!(org && org.discordGuildId)) {
+      if (!org?.discordGuildId) {
         throw new Error("Organization not connected to Discord");
       }
 

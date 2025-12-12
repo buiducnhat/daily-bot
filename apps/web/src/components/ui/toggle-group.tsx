@@ -7,54 +7,51 @@ import { toggleVariants } from "@/components/ui/toggle";
 import { cn } from "@/lib/utils";
 
 const ToggleGroupContext = React.createContext<
-  VariantProps<typeof toggleVariants> & {
-    spacing?: number;
-  }
+  VariantProps<typeof toggleVariants>
 >({
   size: "default",
   variant: "default",
-  spacing: 0,
 });
 
-function ToggleGroup({
+const ToggleGroup = ({
   className,
   variant,
   size,
-  spacing = 0,
   children,
+  ref,
   ...props
-}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
+}: React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> &
   VariantProps<typeof toggleVariants> & {
-    spacing?: number;
-  }) {
-  return (
-    <ToggleGroupPrimitive.Root
-      className={cn(
-        "group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs",
-        className
-      )}
-      data-size={size}
-      data-slot="toggle-group"
-      data-spacing={spacing}
-      data-variant={variant}
-      style={{ "--gap": spacing } as React.CSSProperties}
-      {...props}
-    >
-      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>
-        {children}
-      </ToggleGroupContext.Provider>
-    </ToggleGroupPrimitive.Root>
-  );
-}
+    ref?: React.RefObject<React.ElementRef<
+      typeof ToggleGroupPrimitive.Root
+    > | null>;
+  }) => (
+  <ToggleGroupPrimitive.Root
+    className={cn("flex items-center justify-center gap-1", className)}
+    ref={ref}
+    {...props}
+  >
+    <ToggleGroupContext.Provider value={{ variant, size }}>
+      {children}
+    </ToggleGroupContext.Provider>
+  </ToggleGroupPrimitive.Root>
+);
 
-function ToggleGroupItem({
+ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;
+
+const ToggleGroupItem = ({
   className,
   children,
   variant,
   size,
+  ref,
   ...props
-}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &
-  VariantProps<typeof toggleVariants>) {
+}: React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> &
+  VariantProps<typeof toggleVariants> & {
+    ref?: React.RefObject<React.ElementRef<
+      typeof ToggleGroupPrimitive.Item
+    > | null>;
+  }) => {
   const context = React.useContext(ToggleGroupContext);
 
   return (
@@ -64,19 +61,16 @@ function ToggleGroupItem({
           variant: context.variant || variant,
           size: context.size || size,
         }),
-        "w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10",
-        "data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:first:border-l data-[spacing=0]:first:rounded-l-md",
         className
       )}
-      data-size={context.size || size}
-      data-slot="toggle-group-item"
-      data-spacing={context.spacing}
-      data-variant={context.variant || variant}
+      ref={ref}
       {...props}
     >
       {children}
     </ToggleGroupPrimitive.Item>
   );
-}
+};
+
+ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;
 
 export { ToggleGroup, ToggleGroupItem };

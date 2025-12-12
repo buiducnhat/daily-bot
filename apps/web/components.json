@@ -3,13 +3,19 @@
   "style": "new-york",
   "rsc": true,
   "tsx": true,
-  "tailwind": {},
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/index.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
     "hooks": "@/hooks",
     "lib": "@/lib",
-    "utils": "@workspace/ui/lib/utils",
-    "ui": "@workspace/ui/components"
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui"
   }
 }
