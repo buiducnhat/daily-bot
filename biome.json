@@ -40,14 +40,16 @@
         "noEnum": "off",
         "noParameterAssign": "off",
         "useDefaultSwitchClause": "off",
-        "useFilenamingConvention": "off"
+        "useFilenamingConvention": "off",
+        "noNonNullAssertion": "off"
       },
       "a11y": {
         "useSemanticElements": "off",
         "noSvgWithoutTitle": "off"
       },
       "correctness": {
-        "noNestedComponentDefinitions": "off"
+        "noNestedComponentDefinitions": "off",
+        "useImageSize": "off"
       },
       "nursery": {
         "noShadow": "off",

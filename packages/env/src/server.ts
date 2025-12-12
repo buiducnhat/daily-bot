@@ -15,6 +15,7 @@ export const env = createEnv({
     AUTH_SECRET: z.string(),
     DISCORD_TOKEN: z.string(),
     DISCORD_CLIENT_ID: z.string(),
+    DISCORD_CLIENT_SECRET: z.string(),
   },
   runtimeEnv: process.env,
 });

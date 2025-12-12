@@ -1,22 +1,36 @@
 import { db } from "@daily-bot/db";
-import { dailyUsers } from "@daily-bot/db/schema/daily-standup";
-import { eq } from "drizzle-orm";
 import cron from "node-cron";
 import { startStandup } from "./standup-session";
 
-// Run every minute to check if we should trigger standups (for demo/testing)
-// In production, you'd likely want a configurable time.
-// For this simple bot, let's say "Daily" means 9:00 AM.
-export function setupCron() {
-  cron.schedule("* * * * *", async () => {
-    console.log("Running daily standup cron...");
-    const users = await db
-      .select()
-      .from(dailyUsers)
-      .where(eq(dailyUsers.isActive, true));
-
-    for (const user of users) {
-      await startStandup(user.discordId);
-    }
+export async function setupCron() {
+  console.log("Setting up cron jobs...");
+  const configs = await db.query.standupConfigs.findMany({
+    where: (configs, { eq }) => eq(configs.isActive, true),
+    with: {
+      participants: {
+        with: {
+          discordUser: true,
+        },
+      },
+    },
   });
+
+  for (const config of configs) {
+    if (!config.cron) {
+      continue;
+    }
+    try {
+      cron.schedule(config.cron, async () => {
+        console.log(`Running standup for ${config.name}`);
+        for (const participant of config.participants) {
+          if (participant.discordUser.isActive) {
+            await startStandup(participant.discordUser.discordId, config.id);
+          }
+        }
+      });
+      console.log(`Scheduled ${config.name} at ${config.cron}`);
+    } catch (e) {
+      console.error(`Invalid cron for ${config.name}: ${config.cron}`, e);
+    }
+  }
 }

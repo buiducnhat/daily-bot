@@ -99,6 +99,7 @@ export const organizations = sqliteTable("organizations", {
   slug: text("slug").notNull().unique(),
   logo: text("logo"),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  discordGuildId: text("discord_guild_id"),
   metadata: text("metadata"),
 });
 

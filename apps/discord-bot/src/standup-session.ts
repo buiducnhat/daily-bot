@@ -1,8 +1,5 @@
 import { db } from "@daily-bot/db";
-import {
-  dailyConfigs,
-  dailyStandups,
-} from "@daily-bot/db/schema/daily-standup";
+import { dailyStandups } from "@daily-bot/db/schema/daily-standup";
 import { EmbedBuilder } from "discord.js";
 import { client } from "./client";
 
@@ -10,6 +7,7 @@ type StandupSession = {
   questions: string[];
   currentStepIndex: number; // 0-based index of the question being asked
   answers: Record<string, string>; // Question -> Answer
+  standupConfigId?: number;
 };
 
 export const activeSessions = new Map<string, StandupSession>();
@@ -20,34 +18,35 @@ const DEFAULT_QUESTIONS = [
   "Any blockers?",
 ];
 
-export async function startStandup(userId: string) {
+export async function startStandup(
+  discordUserId: string,
+  standupConfigId: number
+) {
   try {
-    const user = await client.users.fetch(userId);
+    const user = await client.users.fetch(discordUserId);
+    const config = await db.query.standupConfigs.findFirst({
+      where: (configs, { eq }) => eq(configs.id, standupConfigId),
+    });
 
-    // Fetch configuration.
-    // Complexity: User might be in multiple guilds.
-    // Ideally we should know which guild we are running standup for.
-    // The current cron iterates all users.
-    // Let's assume for now we use the first config found that has questions.
-    // Or we should allow specifying guild in `startStandup` if our data model supported it (mapping user <-> guild).
-    // Our schema: `daily_users` is global. `dailyConfigs` is per guild.
-    // We'll pick the first config with questions, or default.
+    if (!config) {
+      console.error(`Standup config ${standupConfigId} not found`);
+      return;
+    }
 
-    // Simplification: Fetch first config available or use default.
-    const config = await db.select().from(dailyConfigs).limit(1).get();
-    const questions = config?.questions || DEFAULT_QUESTIONS;
+    const questions = config.questions || DEFAULT_QUESTIONS;
 
-    activeSessions.set(userId, {
+    activeSessions.set(discordUserId, {
       questions,
       currentStepIndex: 0,
       answers: {},
+      standupConfigId: config.id, // Store config ID in session
     });
 
     await user.send(
-      `Good morning! It's time for your daily standup.\n\n1. ${questions[0]}`
+      `Good morning! It's time for your daily standup for **${config.name}**.\n\n1. ${questions[0]}`
     );
   } catch (error) {
-    console.error(`Failed to start standup for ${userId}`, error);
+    console.error(`Failed to start standup for ${discordUserId}`, error);
   }
 }
 
@@ -73,48 +72,47 @@ export async function handleStandupMessage(message: any) {
     await message.author.send(`${nextIndex + 1}. ${nextQuestion}`);
   } else {
     // Finished
-    const dbUser = await db.query.dailyUsers.findFirst({
+    const dbUser = await db.query.discordUsers.findFirst({
       where: (users, { eq }) => eq(users.discordId, userId),
     });
 
-    if (dbUser) {
+    if (dbUser && session.standupConfigId) {
+      // Fetch config to check for summary channel
+      const config = await db.query.standupConfigs.findFirst({
+        where: (c, { eq }) => eq(c.id, session.standupConfigId!),
+      });
+
       await db.insert(dailyStandups).values({
-        userId: dbUser.id,
+        discordUserId: dbUser.id,
+        standupConfigId: session.standupConfigId,
         date: new Date().toISOString().substring(0, 10),
         answers: session.answers,
       });
 
-      // Post to summary channel
-      // We iterate all configs to find matching guilds/channels
-      const configs = await db.select().from(dailyConfigs);
-      for (const config of configs) {
-        // Only use config if it matches the questions we just asked?
-        // Or just post to all configured channels.
-        // Let's post to all valid channels.
+      if (config?.channelId) {
         const guild = client.guilds.cache.get(config.guildId);
-        if (guild && config.summaryChannelId) {
+        if (guild) {
           try {
             const member = await guild.members.fetch(userId);
-            if (member) {
-              const channel = await guild.channels.fetch(
-                config.summaryChannelId
-              );
-              if (channel?.isTextBased()) {
-                const embed = new EmbedBuilder()
-                  .setTitle(`Daily Standup - ${member.displayName}`)
-                  .setColor("#0099ff")
-                  .setTimestamp();
+            const channel = await guild.channels.fetch(config.channelId);
 
-                // Add fields dynamically
-                for (const [q, a] of Object.entries(session.answers)) {
-                  embed.addFields({ name: q, value: a as string });
-                }
+            if (channel?.isTextBased()) {
+              const embed = new EmbedBuilder()
+                .setTitle(
+                  `Daily Standup - ${member?.displayName || dbUser.username}`
+                )
+                .setDescription(`**${config.name}**`)
+                .setColor("#0099ff")
+                .setTimestamp();
 
-                await channel.send({ embeds: [embed] });
+              for (const [q, a] of Object.entries(session.answers)) {
+                embed.addFields({ name: q, value: a as string });
               }
+
+              await channel.send({ embeds: [embed] });
             }
-          } catch (_e) {
-            // User not in this guild or other error
+          } catch (e) {
+            console.error("Failed to post summary", e);
           }
         }
       }

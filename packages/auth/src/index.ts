@@ -15,10 +15,33 @@ export const auth = betterAuth({
     schema,
   }),
   secret: env.AUTH_SECRET,
-  plugins: [admin(), organization()],
+  plugins: [
+    admin(),
+    organization({
+      schema: {
+        organization: {
+          additionalFields: {
+            discordGuildId: {
+              type: "string",
+              input: true,
+              required: false,
+            },
+          },
+        },
+      },
+    }),
+  ],
   trustedOrigins: env.CORS_ORIGINS,
   emailAndPassword: {
     enabled: true,
+  },
+  socialProviders: {
+    discord: {
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
+      scope: ["guilds"],
+      permissions: 34_359_920_640,
+    },
   },
   advanced: {
     defaultCookieAttributes: {

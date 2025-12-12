@@ -25,6 +25,7 @@
     "zod": "catalog:",
     "@daily-bot/db": "workspace:*",
     "@daily-bot/env": "workspace:*",
-    "@daily-bot/auth": "workspace:*"
+    "@daily-bot/auth": "workspace:*",
+    "drizzle-orm": "catalog:"
   }
 }
