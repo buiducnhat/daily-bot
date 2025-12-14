@@ -1,6 +1,8 @@
 import { env } from "@daily-bot/env/web";
+import NiceModal from "@ebay/nice-modal-react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { BaseAlertDialog } from "@/components/base-alert-dialog";
 import { authClient } from "@/lib/auth-client";
 import { orpc } from "@/lib/orpc";
 
@@ -98,13 +100,16 @@ function SettingsPage() {
         {activeGuild && (
           <div className="mt-4">
             <button
-              className="text-red-500 text-sm hover:underline"
+              className="text-destructive text-sm hover:underline"
               onClick={() => {
-                if (window.confirm("Are you sure you want to disconnect?")) {
-                  // We can implement disconnect logic here or just guide user
-                  // Reusing connect flow to "Switch Server" effectively
-                  handleManualConnect();
-                }
+                NiceModal.show(BaseAlertDialog, {
+                  title: "Disconnect Discord Server",
+                  description: "Are you sure you want to disconnect?",
+                  actionText: "Disconnect",
+                  action: () => {
+                    handleManualConnect();
+                  },
+                });
               }}
               type="button"
             >
