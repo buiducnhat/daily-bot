@@ -21,7 +21,7 @@ export async function setupCron() {
     }
     try {
       cron.schedule(config.cron, async () => {
-        console.log(`Running standup for ${config.name}`);
+        console.log(`Running check-in for ${config.name}`);
         for (const participant of config.participants) {
           if (participant.discordUser.isActive) {
             await startStandup(participant.discordUser.discordId, config.id);

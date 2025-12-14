@@ -43,7 +43,7 @@ export async function startStandup(
     });
 
     await user.send(
-      `Good morning! It's time for your daily standup for **${config.name}**.\n\n1. ${questions[0]}`
+      `Good morning! It's time for your daily check-in for **${config.name}**.\n\n1. ${questions[0]}`
     );
   } catch (error) {
     console.error(`Failed to start standup for ${discordUserId}`, error);
@@ -99,7 +99,7 @@ export async function handleStandupMessage(message: any) {
             if (channel?.isTextBased()) {
               const embed = new EmbedBuilder()
                 .setTitle(
-                  `Daily Standup - ${member?.displayName || dbUser.username}`
+                  `Daily Check-in - ${member?.displayName || dbUser.username}`
                 )
                 .setDescription(`**${config.name}**`)
                 .setColor("#0099ff")
@@ -119,6 +119,6 @@ export async function handleStandupMessage(message: any) {
     }
 
     activeSessions.delete(userId);
-    await message.author.send("Thanks! Your standup has been recorded.");
+    await message.author.send("Thanks! Your check-in has been recorded.");
   }
 }

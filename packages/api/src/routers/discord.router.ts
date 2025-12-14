@@ -154,4 +154,34 @@ export const discordRouter = {
         }))
         .filter((m) => !m.bot); // Filter out bots
     }),
+
+  getGuild: protectedProcedure
+    .input(z.object({ organizationId: z.string() }))
+    .handler(async ({ input }) => {
+      const org = await db.query.organizations.findFirst({
+        where: (orgs, { eq }) => eq(orgs.id, input.organizationId),
+      });
+
+      if (!org?.discordGuildId) {
+        return null;
+      }
+
+      const response = await fetch(
+        `${DISCORD_API_URL}/guilds/${org.discordGuildId}`,
+        {
+          headers: {
+            Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        // If bot is not in guild or other error, just return null or basic info?
+        // If we can't fetch it, maybe it's not connected properly or bot kicked.
+        return null;
+      }
+
+      const guild = (await response.json()) as DiscordGuild;
+      return guild;
+    }),
 };

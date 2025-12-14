@@ -95,24 +95,26 @@ export function ParticipantSelect({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="mb-2 flex flex-wrap gap-2">
-        {value.map((p) => (
-          <Badge
-            className="flex items-center gap-1"
-            key={p.id}
-            variant="secondary"
-          >
-            {p.username}
-            <button
-              className="ml-1 rounded-full hover:text-red-500"
-              onClick={() => removeParticipant(p.id)}
-              type="button"
+      {value.length > 0 && (
+        <div className="mb-2 flex flex-wrap gap-2">
+          {value.map((p) => (
+            <Badge
+              className="flex items-center gap-1"
+              key={p.id}
+              variant="secondary"
             >
-              <X size={14} />
-            </button>
-          </Badge>
-        ))}
-      </div>
+              {p.username}
+              <button
+                className="ml-1 rounded-full hover:text-destructive"
+                onClick={() => removeParticipant(p.id)}
+                type="button"
+              >
+                <X size={14} />
+              </button>
+            </Badge>
+          ))}
+        </div>
+      )}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

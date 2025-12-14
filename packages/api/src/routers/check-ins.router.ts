@@ -8,7 +8,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { publicProcedure } from "../index";
 
-export const standupsRouter = {
+export const checkInsRouter = {
   list: publicProcedure
     .input(z.object({ organizationId: z.string() }))
     .handler(async ({ input }) => {
@@ -135,7 +135,7 @@ export const standupsRouter = {
                 username: p.username,
               })
               .returning();
-            userId = newUser.id;
+            userId = newUser!.id;
           }
 
           await db.insert(standupParticipants).values({

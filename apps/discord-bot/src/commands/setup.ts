@@ -6,11 +6,11 @@ import {
 
 export const data = new SlashCommandBuilder()
   .setName("setup")
-  .setDescription("Configure daily standup settings")
+  .setDescription("Configure daily check-in settings")
   .addChannelOption((option) =>
     option
       .setName("channel")
-      .setDescription("The channel to post standup summaries")
+      .setDescription("The channel to post check-in summaries")
       .addChannelTypes(ChannelType.GuildText)
       .setRequired(true)
   )
@@ -18,7 +18,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: any) {
   await interaction.reply({
-    content: "Please use the Daily Bot Dashboard to configure standups.",
+    content: "Please use the Daily Bot Dashboard to configure check-ins.",
     ephemeral: true,
   });
 }

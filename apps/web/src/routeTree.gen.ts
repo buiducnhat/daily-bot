@@ -9,31 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as StandupsRouteImport } from './routes/standups'
-import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CreateOrganizationRouteImport } from './routes/create-organization'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardwithSidebarRouteRouteImport } from './routes/dashboard/(with-sidebar)/route'
+import { Route as DashboardwithSidebarIndexRouteImport } from './routes/dashboard/(with-sidebar)/index'
+import { Route as DashboardwithSidebarSettingsRouteImport } from './routes/dashboard/(with-sidebar)/settings'
+import { Route as DashboardwithSidebarCheckInsRouteImport } from './routes/dashboard/(with-sidebar)/check-ins'
 
-const StandupsRoute = StandupsRouteImport.update({
-  id: '/standups',
-  path: '/standups',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CreateOrganizationRoute = CreateOrganizationRouteImport.update({
@@ -46,96 +32,101 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardwithSidebarRouteRoute =
+  DashboardwithSidebarRouteRouteImport.update({
+    id: '/dashboard/(with-sidebar)',
+    path: '/dashboard',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DashboardwithSidebarIndexRoute =
+  DashboardwithSidebarIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardwithSidebarRouteRoute,
+  } as any)
+const DashboardwithSidebarSettingsRoute =
+  DashboardwithSidebarSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => DashboardwithSidebarRouteRoute,
+  } as any)
+const DashboardwithSidebarCheckInsRoute =
+  DashboardwithSidebarCheckInsRouteImport.update({
+    id: '/check-ins',
+    path: '/check-ins',
+    getParentRoute: () => DashboardwithSidebarRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/create-organization': typeof CreateOrganizationRoute
-  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
-  '/settings': typeof SettingsRoute
-  '/standups': typeof StandupsRoute
+  '/dashboard': typeof DashboardwithSidebarRouteRouteWithChildren
+  '/dashboard/check-ins': typeof DashboardwithSidebarCheckInsRoute
+  '/dashboard/settings': typeof DashboardwithSidebarSettingsRoute
+  '/dashboard/': typeof DashboardwithSidebarIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/create-organization': typeof CreateOrganizationRoute
-  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
-  '/settings': typeof SettingsRoute
-  '/standups': typeof StandupsRoute
+  '/dashboard/check-ins': typeof DashboardwithSidebarCheckInsRoute
+  '/dashboard/settings': typeof DashboardwithSidebarSettingsRoute
+  '/dashboard': typeof DashboardwithSidebarIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/create-organization': typeof CreateOrganizationRoute
-  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
-  '/settings': typeof SettingsRoute
-  '/standups': typeof StandupsRoute
+  '/dashboard/(with-sidebar)': typeof DashboardwithSidebarRouteRouteWithChildren
+  '/dashboard/(with-sidebar)/check-ins': typeof DashboardwithSidebarCheckInsRoute
+  '/dashboard/(with-sidebar)/settings': typeof DashboardwithSidebarSettingsRoute
+  '/dashboard/(with-sidebar)/': typeof DashboardwithSidebarIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/create-organization'
-    | '/dashboard'
     | '/login'
-    | '/settings'
-    | '/standups'
+    | '/dashboard'
+    | '/dashboard/check-ins'
+    | '/dashboard/settings'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/create-organization'
-    | '/dashboard'
     | '/login'
-    | '/settings'
-    | '/standups'
+    | '/dashboard/check-ins'
+    | '/dashboard/settings'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/create-organization'
-    | '/dashboard'
     | '/login'
-    | '/settings'
-    | '/standups'
+    | '/dashboard/(with-sidebar)'
+    | '/dashboard/(with-sidebar)/check-ins'
+    | '/dashboard/(with-sidebar)/settings'
+    | '/dashboard/(with-sidebar)/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CreateOrganizationRoute: typeof CreateOrganizationRoute
-  DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
-  SettingsRoute: typeof SettingsRoute
-  StandupsRoute: typeof StandupsRoute
+  DashboardwithSidebarRouteRoute: typeof DashboardwithSidebarRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/standups': {
-      id: '/standups'
-      path: '/standups'
-      fullPath: '/standups'
-      preLoaderRoute: typeof StandupsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/create-organization': {
@@ -152,16 +143,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/(with-sidebar)': {
+      id: '/dashboard/(with-sidebar)'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardwithSidebarRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/(with-sidebar)/': {
+      id: '/dashboard/(with-sidebar)/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardwithSidebarIndexRouteImport
+      parentRoute: typeof DashboardwithSidebarRouteRoute
+    }
+    '/dashboard/(with-sidebar)/settings': {
+      id: '/dashboard/(with-sidebar)/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardwithSidebarSettingsRouteImport
+      parentRoute: typeof DashboardwithSidebarRouteRoute
+    }
+    '/dashboard/(with-sidebar)/check-ins': {
+      id: '/dashboard/(with-sidebar)/check-ins'
+      path: '/check-ins'
+      fullPath: '/dashboard/check-ins'
+      preLoaderRoute: typeof DashboardwithSidebarCheckInsRouteImport
+      parentRoute: typeof DashboardwithSidebarRouteRoute
+    }
   }
 }
+
+interface DashboardwithSidebarRouteRouteChildren {
+  DashboardwithSidebarCheckInsRoute: typeof DashboardwithSidebarCheckInsRoute
+  DashboardwithSidebarSettingsRoute: typeof DashboardwithSidebarSettingsRoute
+  DashboardwithSidebarIndexRoute: typeof DashboardwithSidebarIndexRoute
+}
+
+const DashboardwithSidebarRouteRouteChildren: DashboardwithSidebarRouteRouteChildren =
+  {
+    DashboardwithSidebarCheckInsRoute: DashboardwithSidebarCheckInsRoute,
+    DashboardwithSidebarSettingsRoute: DashboardwithSidebarSettingsRoute,
+    DashboardwithSidebarIndexRoute: DashboardwithSidebarIndexRoute,
+  }
+
+const DashboardwithSidebarRouteRouteWithChildren =
+  DashboardwithSidebarRouteRoute._addFileChildren(
+    DashboardwithSidebarRouteRouteChildren,
+  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CreateOrganizationRoute: CreateOrganizationRoute,
-  DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
-  SettingsRoute: SettingsRoute,
-  StandupsRoute: StandupsRoute,
+  DashboardwithSidebarRouteRoute: DashboardwithSidebarRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

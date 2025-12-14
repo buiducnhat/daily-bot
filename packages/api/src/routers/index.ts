@@ -1,7 +1,7 @@
 import type { RouterClient } from "@orpc/server";
 import { protectedProcedure, publicProcedure } from "../index";
+import { checkInsRouter } from "./check-ins.router";
 import { discordRouter } from "./discord.router";
-import { standupsRouter } from "./standups.router";
 
 export const appRouter = {
   healthCheck: publicProcedure.handler(() => "OK"),
@@ -9,7 +9,7 @@ export const appRouter = {
     message: "This is private",
     user: context.session?.user,
   })),
-  standups: standupsRouter,
+  checkIns: checkInsRouter,
   discord: discordRouter,
 };
 
