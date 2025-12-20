@@ -9,19 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as CreateOrganizationRouteImport } from './routes/create-organization'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
+import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as DashboardwithSidebarRouteRouteImport } from './routes/dashboard/(with-sidebar)/route'
 import { Route as DashboardwithSidebarIndexRouteImport } from './routes/dashboard/(with-sidebar)/index'
 import { Route as DashboardwithSidebarSettingsRouteImport } from './routes/dashboard/(with-sidebar)/settings'
-import { Route as DashboardwithSidebarCheckInsRouteImport } from './routes/dashboard/(with-sidebar)/check-ins'
+import { Route as DashboardwithSidebarCheckInsIndexRouteImport } from './routes/dashboard/(with-sidebar)/check-ins/index'
+import { Route as DashboardwithSidebarCheckInsNewRouteImport } from './routes/dashboard/(with-sidebar)/check-ins/new'
 
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CreateOrganizationRoute = CreateOrganizationRouteImport.update({
   id: '/create-organization',
   path: '/create-organization',
@@ -30,6 +27,16 @@ const CreateOrganizationRoute = CreateOrganizationRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/auth/sign-up',
+  path: '/auth/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignInRoute = AuthSignInRouteImport.update({
+  id: '/auth/sign-in',
+  path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardwithSidebarRouteRoute =
@@ -50,85 +57,97 @@ const DashboardwithSidebarSettingsRoute =
     path: '/settings',
     getParentRoute: () => DashboardwithSidebarRouteRoute,
   } as any)
-const DashboardwithSidebarCheckInsRoute =
-  DashboardwithSidebarCheckInsRouteImport.update({
-    id: '/check-ins',
-    path: '/check-ins',
+const DashboardwithSidebarCheckInsIndexRoute =
+  DashboardwithSidebarCheckInsIndexRouteImport.update({
+    id: '/check-ins/',
+    path: '/check-ins/',
+    getParentRoute: () => DashboardwithSidebarRouteRoute,
+  } as any)
+const DashboardwithSidebarCheckInsNewRoute =
+  DashboardwithSidebarCheckInsNewRouteImport.update({
+    id: '/check-ins/new',
+    path: '/check-ins/new',
     getParentRoute: () => DashboardwithSidebarRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/create-organization': typeof CreateOrganizationRoute
-  '/login': typeof LoginRoute
   '/dashboard': typeof DashboardwithSidebarRouteRouteWithChildren
-  '/dashboard/check-ins': typeof DashboardwithSidebarCheckInsRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/settings': typeof DashboardwithSidebarSettingsRoute
   '/dashboard/': typeof DashboardwithSidebarIndexRoute
+  '/dashboard/check-ins/new': typeof DashboardwithSidebarCheckInsNewRoute
+  '/dashboard/check-ins': typeof DashboardwithSidebarCheckInsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/create-organization': typeof CreateOrganizationRoute
-  '/login': typeof LoginRoute
-  '/dashboard/check-ins': typeof DashboardwithSidebarCheckInsRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/settings': typeof DashboardwithSidebarSettingsRoute
   '/dashboard': typeof DashboardwithSidebarIndexRoute
+  '/dashboard/check-ins/new': typeof DashboardwithSidebarCheckInsNewRoute
+  '/dashboard/check-ins': typeof DashboardwithSidebarCheckInsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/create-organization': typeof CreateOrganizationRoute
-  '/login': typeof LoginRoute
   '/dashboard/(with-sidebar)': typeof DashboardwithSidebarRouteRouteWithChildren
-  '/dashboard/(with-sidebar)/check-ins': typeof DashboardwithSidebarCheckInsRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/(with-sidebar)/settings': typeof DashboardwithSidebarSettingsRoute
   '/dashboard/(with-sidebar)/': typeof DashboardwithSidebarIndexRoute
+  '/dashboard/(with-sidebar)/check-ins/new': typeof DashboardwithSidebarCheckInsNewRoute
+  '/dashboard/(with-sidebar)/check-ins/': typeof DashboardwithSidebarCheckInsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/create-organization'
-    | '/login'
     | '/dashboard'
-    | '/dashboard/check-ins'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/dashboard/settings'
     | '/dashboard/'
+    | '/dashboard/check-ins/new'
+    | '/dashboard/check-ins'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/create-organization'
-    | '/login'
-    | '/dashboard/check-ins'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/dashboard/settings'
     | '/dashboard'
+    | '/dashboard/check-ins/new'
+    | '/dashboard/check-ins'
   id:
     | '__root__'
     | '/'
     | '/create-organization'
-    | '/login'
     | '/dashboard/(with-sidebar)'
-    | '/dashboard/(with-sidebar)/check-ins'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/dashboard/(with-sidebar)/settings'
     | '/dashboard/(with-sidebar)/'
+    | '/dashboard/(with-sidebar)/check-ins/new'
+    | '/dashboard/(with-sidebar)/check-ins/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CreateOrganizationRoute: typeof CreateOrganizationRoute
-  LoginRoute: typeof LoginRoute
   DashboardwithSidebarRouteRoute: typeof DashboardwithSidebarRouteRouteWithChildren
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/create-organization': {
       id: '/create-organization'
       path: '/create-organization'
@@ -141,6 +160,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/sign-up': {
+      id: '/auth/sign-up'
+      path: '/auth/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/auth/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/(with-sidebar)': {
@@ -164,27 +197,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardwithSidebarSettingsRouteImport
       parentRoute: typeof DashboardwithSidebarRouteRoute
     }
-    '/dashboard/(with-sidebar)/check-ins': {
-      id: '/dashboard/(with-sidebar)/check-ins'
+    '/dashboard/(with-sidebar)/check-ins/': {
+      id: '/dashboard/(with-sidebar)/check-ins/'
       path: '/check-ins'
       fullPath: '/dashboard/check-ins'
-      preLoaderRoute: typeof DashboardwithSidebarCheckInsRouteImport
+      preLoaderRoute: typeof DashboardwithSidebarCheckInsIndexRouteImport
+      parentRoute: typeof DashboardwithSidebarRouteRoute
+    }
+    '/dashboard/(with-sidebar)/check-ins/new': {
+      id: '/dashboard/(with-sidebar)/check-ins/new'
+      path: '/check-ins/new'
+      fullPath: '/dashboard/check-ins/new'
+      preLoaderRoute: typeof DashboardwithSidebarCheckInsNewRouteImport
       parentRoute: typeof DashboardwithSidebarRouteRoute
     }
   }
 }
 
 interface DashboardwithSidebarRouteRouteChildren {
-  DashboardwithSidebarCheckInsRoute: typeof DashboardwithSidebarCheckInsRoute
   DashboardwithSidebarSettingsRoute: typeof DashboardwithSidebarSettingsRoute
   DashboardwithSidebarIndexRoute: typeof DashboardwithSidebarIndexRoute
+  DashboardwithSidebarCheckInsNewRoute: typeof DashboardwithSidebarCheckInsNewRoute
+  DashboardwithSidebarCheckInsIndexRoute: typeof DashboardwithSidebarCheckInsIndexRoute
 }
 
 const DashboardwithSidebarRouteRouteChildren: DashboardwithSidebarRouteRouteChildren =
   {
-    DashboardwithSidebarCheckInsRoute: DashboardwithSidebarCheckInsRoute,
     DashboardwithSidebarSettingsRoute: DashboardwithSidebarSettingsRoute,
     DashboardwithSidebarIndexRoute: DashboardwithSidebarIndexRoute,
+    DashboardwithSidebarCheckInsNewRoute: DashboardwithSidebarCheckInsNewRoute,
+    DashboardwithSidebarCheckInsIndexRoute:
+      DashboardwithSidebarCheckInsIndexRoute,
   }
 
 const DashboardwithSidebarRouteRouteWithChildren =
@@ -195,8 +238,9 @@ const DashboardwithSidebarRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CreateOrganizationRoute: CreateOrganizationRoute,
-  LoginRoute: LoginRoute,
   DashboardwithSidebarRouteRoute: DashboardwithSidebarRouteRouteWithChildren,
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

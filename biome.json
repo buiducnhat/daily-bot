@@ -49,7 +49,8 @@
       },
       "correctness": {
         "noNestedComponentDefinitions": "off",
-        "useImageSize": "off"
+        "useImageSize": "off",
+        "noUnknownTypeSelector": "off"
       },
       "nursery": {
         "noShadow": "off",
