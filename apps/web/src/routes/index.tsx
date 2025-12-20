@@ -1,15 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  BarChart,
-  Bot,
-  Calendar,
-  CheckCircle2,
-  ChevronRight,
-  Clock,
-  MessageSquare,
-  Shield,
-  Zap,
-} from "lucide-react";
+  IconBolt,
+  IconCalendar,
+  IconChartBar,
+  IconChevronRight,
+  IconCircleCheck,
+  IconClock,
+  IconMessage,
+  IconRobot,
+  IconShield,
+} from "@tabler/icons-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,7 +33,7 @@ function HomeComponent() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Bot className="h-5 w-5" />
+              <IconRobot className="h-5 w-5" />
             </div>
             <span>Daily Bot</span>
           </div>
@@ -95,7 +95,7 @@ function HomeComponent() {
                 <Link to="/dashboard">
                   <Button className="h-12 px-8 text-base" size="lg">
                     Add to Your Platform{" "}
-                    <ChevronRight className="ml-2 h-4 w-4" />
+                    <IconChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
                 <Button
@@ -108,15 +108,15 @@ function HomeComponent() {
               </div>
               <div className="mt-12 flex items-center justify-center gap-8 text-muted-foreground text-sm">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <IconCircleCheck className="h-4 w-4 text-green-500" />
                   <span>Free for small teams</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <IconCircleCheck className="h-4 w-4 text-green-500" />
                   <span>No credit card required</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <IconCircleCheck className="h-4 w-4 text-green-500" />
                   <span>Setup in 2 minutes</span>
                 </div>
               </div>
@@ -146,32 +146,32 @@ function HomeComponent() {
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               <FeatureCard
                 description="Run daily standups asynchronously without interrupting your team's flow zone. Timezone friendly."
-                icon={<Clock className="h-6 w-6 text-primary" />}
+                icon={<IconClock className="h-6 w-6 text-primary" />}
                 title="Async Standups"
               />
               <FeatureCard
                 description="Automated end-of-week summaries and planning prompts to keep everyone aligned on goals."
-                icon={<Calendar className="h-6 w-6 text-primary" />}
+                icon={<IconCalendar className="h-6 w-6 text-primary" />}
                 title="Weekly Check-ins"
               />
               <FeatureCard
                 description="Visualize participation rates, mood trends, and blockers over time with beautiful dashboards."
-                icon={<BarChart className="h-6 w-6 text-primary" />}
+                icon={<IconChartBar className="h-6 w-6 text-primary" />}
                 title="Team Analytics"
               />
               <FeatureCard
                 description="Get summarized reports delivered to specific channels or DM'd to stakeholders instantly."
-                icon={<Zap className="h-6 w-6 text-primary" />}
+                icon={<IconBolt className="h-6 w-6 text-primary" />}
                 title="Instant Reports"
               />
               <FeatureCard
                 description="SOC2 compliant data handling with role-based permissions and audit logs for peace of mind."
-                icon={<Shield className="h-6 w-6 text-primary" />}
+                icon={<IconShield className="h-6 w-6 text-primary" />}
                 title="Enterprise Security"
               />
               <FeatureCard
                 description="Tailor the questions to your team's needs. Supports text, mood ratings, and multiple choice."
-                icon={<MessageSquare className="h-6 w-6 text-primary" />}
+                icon={<IconMessage className="h-6 w-6 text-primary" />}
                 title="Custom Questions"
               />
             </div>
@@ -219,7 +219,7 @@ function HomeComponent() {
             <div className="col-span-2 md:col-span-1">
               <div className="mb-4 flex items-center gap-2 font-bold text-xl">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Bot className="h-5 w-5" />
+                  <IconRobot className="h-5 w-5" />
                 </div>
                 <span>Daily Bot</span>
               </div>

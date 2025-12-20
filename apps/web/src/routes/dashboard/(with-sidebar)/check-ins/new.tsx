@@ -1,7 +1,7 @@
+import { IconChevronLeft } from "@tabler/icons-react";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { CronPicker } from "@/components/cron-picker";
@@ -126,7 +126,7 @@ function NewCheckInPage() {
       <div className="mb-6 flex items-center gap-4">
         <Link to="/dashboard/check-ins">
           <Button size="icon" variant="ghost">
-            <ChevronLeft className="h-4 w-4" />
+            <IconChevronLeft className="h-4 w-4" />
           </Button>
         </Link>
         <h1 className="font-bold text-2xl">Create New Check-in</h1>

@@ -19,7 +19,8 @@
       "!**/.alchemy",
       "!**/.svelte-kit",
       "!**/wrangler.jsonc",
-      "!**/.source"
+      "!**/.source",
+      "!apps/web/src/components/ui/*.tsx"
     ]
   },
   "extends": ["ultracite/core", "ultracite/react"],
@@ -45,7 +46,10 @@
       },
       "a11y": {
         "useSemanticElements": "off",
-        "noSvgWithoutTitle": "off"
+        "noSvgWithoutTitle": "off",
+        "noLabelWithoutControl": "off",
+        "useKeyWithClickEvents": "off",
+        "noNoninteractiveElementInteractions": "off"
       },
       "correctness": {
         "noNestedComponentDefinitions": "off",

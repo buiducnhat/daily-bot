@@ -1,6 +1,6 @@
 "use client";
 
-import { MoonIcon, SunIcon } from "lucide-react";
+import { IconMoon, IconSun } from "@tabler/icons-react";
 import { useTheme } from "next-themes";
 import { useCallback, useRef } from "react";
 import { flushSync } from "react-dom";
@@ -65,7 +65,7 @@ export const AnimatedThemeToggler = ({ className }: Props) => {
       size="icon"
       variant="outline"
     >
-      {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+      {theme === "dark" ? <IconSun /> : <IconMoon />}
     </Button>
   );
 };

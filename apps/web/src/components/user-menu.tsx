@@ -22,7 +22,7 @@ export default function UserMenu() {
   if (!session) {
     return (
       <Button asChild variant="outline">
-        <Link to="/login">Sign In</Link>
+        <Link to="/auth/sign-in">Sign In</Link>
       </Button>
     );
   }
@@ -48,7 +48,6 @@ export default function UserMenu() {
               },
             });
           }}
-          variant="destructive"
         >
           Sign Out
         </DropdownMenuItem>

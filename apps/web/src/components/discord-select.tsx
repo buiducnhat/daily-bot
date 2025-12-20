@@ -1,4 +1,4 @@
-import { Check, ChevronDown, X } from "lucide-react";
+import { IconCheck, IconChevronDown, IconX } from "@tabler/icons-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,7 +38,7 @@ export function ChannelSelect({
             : isLoading
               ? "Loading..."
               : "Select Channel"}
-          <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+          <IconChevronDown className="ml-2 h-4 w-4 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="h-[300px] w-[300px] overflow-y-auto">
@@ -47,7 +47,7 @@ export function ChannelSelect({
             key={channel.id}
             onSelect={() => onValueChange(channel.id)}
           >
-            <Check
+            <IconCheck
               className={cn(
                 "mr-2 h-4 w-4",
                 value === channel.id ? "opacity-100" : "opacity-0"
@@ -109,7 +109,7 @@ export function ParticipantSelect({
                 onClick={() => removeParticipant(p.id)}
                 type="button"
               >
-                <X size={14} />
+                <IconX size={14} />
               </button>
             </Badge>
           ))}
@@ -123,7 +123,7 @@ export function ParticipantSelect({
             variant="outline"
           >
             {isLoading ? "Loading members..." : "Add Participants"}
-            <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+            <IconChevronDown className="ml-2 h-4 w-4 opacity-50" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent

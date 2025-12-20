@@ -1,7 +1,7 @@
 "use client";
 
+import { IconLogout, IconSelector, IconSparkles } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-router";
-import { ChevronsUpDown, LogOut, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -51,7 +51,7 @@ export function NavUser({
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <IconSelector className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -77,7 +77,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Sparkles className="mr-2 size-4" />
+                <IconSparkles className="mr-2 size-4" />
                 Upgrade to Pro
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -95,7 +95,7 @@ export function NavUser({
                 });
               }}
             >
-              <LogOut className="mr-2 size-4" />
+              <IconLogout className="mr-2 size-4" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

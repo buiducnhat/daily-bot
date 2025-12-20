@@ -1,64 +1,88 @@
-"use client";
-
-import * as TabsPrimitive from "@radix-ui/react-tabs";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Tabs as TabsPrimitive } from "radix-ui";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const Tabs = TabsPrimitive.Root;
-
-const TabsList = ({
+function Tabs({
   className,
-  ref,
+  orientation = "horizontal",
   ...props
-}: React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> & {
-  ref?: React.RefObject<React.ElementRef<typeof TabsPrimitive.List> | null>;
-}) => (
-  <TabsPrimitive.List
-    className={cn(
-      "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
-      className
-    )}
-    ref={ref}
-    {...props}
-  />
-);
-TabsList.displayName = TabsPrimitive.List.displayName;
+}: React.ComponentProps<typeof TabsPrimitive.Root>) {
+  return (
+    <TabsPrimitive.Root
+      className={cn(
+        "group/tabs flex gap-2 data-[orientation=horizontal]:flex-col",
+        className
+      )}
+      data-orientation={orientation}
+      data-slot="tabs"
+      {...props}
+    />
+  );
+}
 
-const TabsTrigger = ({
+const tabsListVariants = cva(
+  "group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground data-[variant=line]:rounded-none group-data-[orientation=vertical]/tabs:h-fit group-data-horizontal/tabs:h-8 group-data-[orientation=vertical]/tabs:flex-col",
+  {
+    variants: {
+      variant: {
+        default: "bg-muted",
+        line: "gap-1 bg-transparent",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+function TabsList({
   className,
-  ref,
+  variant = "default",
   ...props
-}: React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> & {
-  ref?: React.RefObject<React.ElementRef<typeof TabsPrimitive.Trigger> | null>;
-}) => (
-  <TabsPrimitive.Trigger
-    className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 font-medium text-sm ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
-      className
-    )}
-    ref={ref}
-    {...props}
-  />
-);
-TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
+}: React.ComponentProps<typeof TabsPrimitive.List> &
+  VariantProps<typeof tabsListVariants>) {
+  return (
+    <TabsPrimitive.List
+      className={cn(tabsListVariants({ variant }), className)}
+      data-slot="tabs-list"
+      data-variant={variant}
+      {...props}
+    />
+  );
+}
 
-const TabsContent = ({
+function TabsTrigger({
   className,
-  ref,
   ...props
-}: React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> & {
-  ref?: React.RefObject<React.ElementRef<typeof TabsPrimitive.Content> | null>;
-}) => (
-  <TabsPrimitive.Content
-    className={cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      className
-    )}
-    ref={ref}
-    {...props}
-  />
-);
-TabsContent.displayName = TabsPrimitive.Content.displayName;
+}: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
+  return (
+    <TabsPrimitive.Trigger
+      className={cn(
+        "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-transparent px-1.5 py-0.5 font-medium text-foreground/60 text-sm transition-all hover:text-foreground focus-visible:border-ring focus-visible:outline-1 focus-visible:outline-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none dark:text-muted-foreground dark:hover:text-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent",
+        "data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground",
+        "group-data-[orientation=vertical]/tabs:after:-right-1 after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
+        className
+      )}
+      data-slot="tabs-trigger"
+      {...props}
+    />
+  );
+}
 
-export { Tabs, TabsList, TabsTrigger, TabsContent };
+function TabsContent({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Content>) {
+  return (
+    <TabsPrimitive.Content
+      className={cn("flex-1 text-sm outline-none", className)}
+      data-slot="tabs-content"
+      {...props}
+    />
+  );
+}
+
+export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants };

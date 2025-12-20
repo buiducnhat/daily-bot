@@ -17,7 +17,7 @@ export const Route = createFileRoute("/dashboard/(with-sidebar)")({
   loader: ({ context }) => {
     if (!context.session) {
       throw redirect({
-        to: "/login",
+        to: "/auth/sign-in",
       });
     }
   },
@@ -36,7 +36,7 @@ function DashboardLayout() {
             <AnimatedThemeToggler />
           </div>
         </header>
-        <div className="max-h-[calc(100vh-64px)] overflow-y-auto p-6">
+        <div className="max-h-[calc(100vh-64px)] overflow-y-auto p-4">
           <Outlet />
         </div>
       </SidebarInset>

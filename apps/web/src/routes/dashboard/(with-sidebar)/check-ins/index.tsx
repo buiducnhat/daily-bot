@@ -1,6 +1,6 @@
+import { IconPlus } from "@tabler/icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
@@ -64,7 +64,7 @@ function CheckInsPage() {
           )}
           <Link to="/dashboard/check-ins/new">
             <Button disabled={!currentOrg?.discordGuildId}>
-              <Plus />
+              <IconPlus />
               New Check-in
             </Button>
           </Link>

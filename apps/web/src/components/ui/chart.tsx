@@ -34,19 +34,18 @@ function useChart() {
   return context;
 }
 
-const ChartContainer = ({
+function ChartContainer({
   id,
   className,
   children,
   config,
-  ref,
   ...props
 }: React.ComponentProps<"div"> & {
   config: ChartConfig;
   children: React.ComponentProps<
     typeof RechartsPrimitive.ResponsiveContainer
   >["children"];
-} & { ref?: React.RefObject<HTMLDivElement | null> }) => {
+}) {
   const uniqueId = React.useId();
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`;
 
@@ -54,11 +53,11 @@ const ChartContainer = ({
     <ChartContext.Provider value={{ config }}>
       <div
         className={cn(
-          "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none",
+          "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden",
           className
         )}
         data-chart={chartId}
-        ref={ref}
+        data-slot="chart"
         {...props}
       >
         <ChartStyle config={config} id={chartId} />
@@ -68,8 +67,7 @@ const ChartContainer = ({
       </div>
     </ChartContext.Provider>
   );
-};
-ChartContainer.displayName = "Chart";
+}
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
@@ -82,7 +80,6 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
   return (
     <style
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: <>
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(
@@ -107,7 +104,7 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
 
-const ChartTooltipContent = ({
+function ChartTooltipContent({
   active,
   payload,
   className,
@@ -121,7 +118,6 @@ const ChartTooltipContent = ({
   color,
   nameKey,
   labelKey,
-  ref,
 }: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
   React.ComponentProps<"div"> & {
     hideLabel?: boolean;
@@ -129,7 +125,7 @@ const ChartTooltipContent = ({
     indicator?: "line" | "dot" | "dashed";
     nameKey?: string;
     labelKey?: string;
-  } & { ref?: React.RefObject<HTMLDivElement | null> }) => {
+  }) {
   const { config } = useChart();
 
   const tooltipLabel = React.useMemo(() => {
@@ -177,10 +173,9 @@ const ChartTooltipContent = ({
   return (
     <div
       className={cn(
-        "grid min-w-32 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
+        "grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
         className
       )}
-      ref={ref}
     >
       {nestLabel ? null : tooltipLabel}
       <div className="grid gap-1.5">
@@ -209,7 +204,7 @@ const ChartTooltipContent = ({
                       !hideIndicator && (
                         <div
                           className={cn(
-                            "shrink-0 rounded-[2px] border-[--color-border] bg-[--color-bg]",
+                            "shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)",
                             {
                               "h-2.5 w-2.5": indicator === "dot",
                               "w-1": indicator === "line",
@@ -253,23 +248,21 @@ const ChartTooltipContent = ({
       </div>
     </div>
   );
-};
-ChartTooltipContent.displayName = "ChartTooltip";
+}
 
 const ChartLegend = RechartsPrimitive.Legend;
 
-const ChartLegendContent = ({
+function ChartLegendContent({
   className,
   hideIcon = false,
   payload,
   verticalAlign = "bottom",
   nameKey,
-  ref,
 }: React.ComponentProps<"div"> &
   Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
     hideIcon?: boolean;
     nameKey?: string;
-  } & { ref?: React.RefObject<HTMLDivElement | null> }) => {
+  }) {
   const { config } = useChart();
 
   if (!payload?.length) {
@@ -283,7 +276,6 @@ const ChartLegendContent = ({
         verticalAlign === "top" ? "pb-3" : "pt-3",
         className
       )}
-      ref={ref}
     >
       {payload
         .filter((item) => item.type !== "none")
@@ -314,10 +306,8 @@ const ChartLegendContent = ({
         })}
     </div>
   );
-};
-ChartLegendContent.displayName = "ChartLegend";
+}
 
-// Helper to extract item config from a payload.
 function getPayloadConfigFromPayload(
   config: ChartConfig,
   payload: unknown,

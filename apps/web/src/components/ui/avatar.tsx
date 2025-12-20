@@ -1,61 +1,110 @@
-"use client";
-
-import * as AvatarPrimitive from "@radix-ui/react-avatar";
+import { Avatar as AvatarPrimitive } from "radix-ui";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const Avatar = ({
+function Avatar({
   className,
-  ref,
+  size = "default",
   ...props
-}: React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
-  ref?: React.RefObject<React.ElementRef<typeof AvatarPrimitive.Root> | null>;
-}) => (
-  <AvatarPrimitive.Root
-    className={cn(
-      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
-      className
-    )}
-    ref={ref}
-    {...props}
-  />
-);
-Avatar.displayName = AvatarPrimitive.Root.displayName;
+}: React.ComponentProps<typeof AvatarPrimitive.Root> & {
+  size?: "default" | "sm" | "lg";
+}) {
+  return (
+    <AvatarPrimitive.Root
+      className={cn(
+        "group/avatar relative flex size-8 shrink-0 select-none rounded-full after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten",
+        className
+      )}
+      data-size={size}
+      data-slot="avatar"
+      {...props}
+    />
+  );
+}
 
-const AvatarImage = ({
+function AvatarImage({
   className,
-  ref,
   ...props
-}: React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image> & {
-  ref?: React.RefObject<React.ElementRef<typeof AvatarPrimitive.Image> | null>;
-}) => (
-  <AvatarPrimitive.Image
-    className={cn("aspect-square h-full w-full", className)}
-    ref={ref}
-    {...props}
-  />
-);
-AvatarImage.displayName = AvatarPrimitive.Image.displayName;
+}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+  return (
+    <AvatarPrimitive.Image
+      className={cn(
+        "aspect-square size-full rounded-full object-cover",
+        className
+      )}
+      data-slot="avatar-image"
+      {...props}
+    />
+  );
+}
 
-const AvatarFallback = ({
+function AvatarFallback({
   className,
-  ref,
   ...props
-}: React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback> & {
-  ref?: React.RefObject<React.ElementRef<
-    typeof AvatarPrimitive.Fallback
-  > | null>;
-}) => (
-  <AvatarPrimitive.Fallback
-    className={cn(
-      "flex h-full w-full items-center justify-center rounded-full bg-muted",
-      className
-    )}
-    ref={ref}
-    {...props}
-  />
-);
-AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
+  return (
+    <AvatarPrimitive.Fallback
+      className={cn(
+        "flex size-full items-center justify-center rounded-full bg-muted text-muted-foreground text-sm group-data-[size=sm]/avatar:text-xs",
+        className
+      )}
+      data-slot="avatar-fallback"
+      {...props}
+    />
+  );
+}
 
-export { Avatar, AvatarImage, AvatarFallback };
+function AvatarBadge({ className, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span
+      className={cn(
+        "absolute right-0 bottom-0 z-10 inline-flex select-none items-center justify-center rounded-full bg-primary text-primary-foreground bg-blend-color ring-2 ring-background",
+        "group-data-[size=sm]/avatar:size-2 group-data-[size=sm]/avatar:[&>svg]:hidden",
+        "group-data-[size=default]/avatar:size-2.5 group-data-[size=default]/avatar:[&>svg]:size-2",
+        "group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2",
+        className
+      )}
+      data-slot="avatar-badge"
+      {...props}
+    />
+  );
+}
+
+function AvatarGroup({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "group/avatar-group -space-x-2 flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background",
+        className
+      )}
+      data-slot="avatar-group"
+      {...props}
+    />
+  );
+}
+
+function AvatarGroupCount({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "relative flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground text-sm ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3",
+        className
+      )}
+      data-slot="avatar-group-count"
+      {...props}
+    />
+  );
+}
+
+export {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarBadge,
+};

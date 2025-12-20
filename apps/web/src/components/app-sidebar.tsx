@@ -1,14 +1,14 @@
 "use client";
 
-import { Link, useLocation } from "@tanstack/react-router";
 import {
-  AudioWaveform,
-  ChevronsUpDown,
-  GalleryVerticalEnd,
-  LayoutDashboard,
-  Plus,
-  Settings,
-} from "lucide-react";
+  IconCalendar,
+  IconLayoutDashboard,
+  IconLayoutSidebar,
+  IconPlus,
+  IconSelector,
+  IconSettings,
+} from "@tabler/icons-react";
+import { Link, useLocation } from "@tanstack/react-router";
 import type * as React from "react";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -40,17 +40,17 @@ const data = {
     {
       title: "Overview",
       url: "/dashboard",
-      icon: LayoutDashboard,
+      icon: IconLayoutDashboard,
     },
     {
       title: "Daily Check-in",
       url: "/dashboard/check-ins",
-      icon: AudioWaveform,
+      icon: IconCalendar,
     },
     {
       title: "Settings",
       url: "/dashboard/settings",
-      icon: Settings,
+      icon: IconSettings,
     },
   ],
 };
@@ -85,7 +85,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         src={activeOrg.logo}
                       />
                     ) : (
-                      <GalleryVerticalEnd className="size-4" />
+                      <IconLayoutSidebar className="size-4" />
                     )}
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
@@ -96,7 +96,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       {activeOrg?.slug ?? "No Organization"}
                     </span>
                   </div>
-                  <ChevronsUpDown className="ml-auto" />
+                  <IconSelector className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -126,7 +126,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                           src={org.logo}
                         />
                       ) : (
-                        <GalleryVerticalEnd className="size-4 shrink-0" />
+                        <IconSelector className="size-4 shrink-0" />
                       )}
                     </div>
                     {org.name}
@@ -139,7 +139,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <DropdownMenuItem asChild className="gap-2 p-2">
                   <Link to="/create-organization">
                     <div className="flex size-6 items-center justify-center rounded-md border">
-                      <Plus className="size-4" />
+                      <IconPlus className="size-4" />
                     </div>
                     <div className="font-medium text-muted-foreground">
                       Add Organization
