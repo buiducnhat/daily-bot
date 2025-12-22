@@ -93,7 +93,7 @@ export function CronPicker({ value, onChange, className }: CronPickerProps) {
           onValueChange={(v) => updateCron(v, minute, selectedDays)}
           value={hour}
         >
-          <SelectTrigger className="w-[70px]">
+          <SelectTrigger>
             <SelectValue placeholder="HH" />
           </SelectTrigger>
           <SelectContent>
@@ -109,7 +109,7 @@ export function CronPicker({ value, onChange, className }: CronPickerProps) {
           onValueChange={(v) => updateCron(hour, v, selectedDays)}
           value={minute}
         >
-          <SelectTrigger className="w-[70px]">
+          <SelectTrigger>
             <SelectValue placeholder="MM" />
           </SelectTrigger>
           <SelectContent>
@@ -136,7 +136,6 @@ export function CronPicker({ value, onChange, className }: CronPickerProps) {
           {DAYS.map((day) => (
             <ToggleGroupItem
               aria-label={day.label}
-              className="h-8 w-10 px-2 text-xs"
               key={day.value}
               value={day.value}
             >

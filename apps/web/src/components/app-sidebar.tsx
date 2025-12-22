@@ -43,7 +43,7 @@ const data = {
       icon: IconLayoutDashboard,
     },
     {
-      title: "Daily Check-in",
+      title: "Check-ins",
       url: "/dashboard/check-ins",
       icon: IconCalendar,
     },

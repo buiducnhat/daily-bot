@@ -18,6 +18,7 @@ import { Route as DashboardwithSidebarIndexRouteImport } from './routes/dashboar
 import { Route as DashboardwithSidebarSettingsRouteImport } from './routes/dashboard/(with-sidebar)/settings'
 import { Route as DashboardwithSidebarCheckInsIndexRouteImport } from './routes/dashboard/(with-sidebar)/check-ins/index'
 import { Route as DashboardwithSidebarCheckInsNewRouteImport } from './routes/dashboard/(with-sidebar)/check-ins/new'
+import { Route as DashboardwithSidebarCheckInsCheckInIdRouteImport } from './routes/dashboard/(with-sidebar)/check-ins/$checkInId'
 
 const CreateOrganizationRoute = CreateOrganizationRouteImport.update({
   id: '/create-organization',
@@ -69,6 +70,12 @@ const DashboardwithSidebarCheckInsNewRoute =
     path: '/check-ins/new',
     getParentRoute: () => DashboardwithSidebarRouteRoute,
   } as any)
+const DashboardwithSidebarCheckInsCheckInIdRoute =
+  DashboardwithSidebarCheckInsCheckInIdRouteImport.update({
+    id: '/check-ins/$checkInId',
+    path: '/check-ins/$checkInId',
+    getParentRoute: () => DashboardwithSidebarRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/settings': typeof DashboardwithSidebarSettingsRoute
   '/dashboard/': typeof DashboardwithSidebarIndexRoute
+  '/dashboard/check-ins/$checkInId': typeof DashboardwithSidebarCheckInsCheckInIdRoute
   '/dashboard/check-ins/new': typeof DashboardwithSidebarCheckInsNewRoute
   '/dashboard/check-ins': typeof DashboardwithSidebarCheckInsIndexRoute
 }
@@ -88,6 +96,7 @@ export interface FileRoutesByTo {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/settings': typeof DashboardwithSidebarSettingsRoute
   '/dashboard': typeof DashboardwithSidebarIndexRoute
+  '/dashboard/check-ins/$checkInId': typeof DashboardwithSidebarCheckInsCheckInIdRoute
   '/dashboard/check-ins/new': typeof DashboardwithSidebarCheckInsNewRoute
   '/dashboard/check-ins': typeof DashboardwithSidebarCheckInsIndexRoute
 }
@@ -100,6 +109,7 @@ export interface FileRoutesById {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/(with-sidebar)/settings': typeof DashboardwithSidebarSettingsRoute
   '/dashboard/(with-sidebar)/': typeof DashboardwithSidebarIndexRoute
+  '/dashboard/(with-sidebar)/check-ins/$checkInId': typeof DashboardwithSidebarCheckInsCheckInIdRoute
   '/dashboard/(with-sidebar)/check-ins/new': typeof DashboardwithSidebarCheckInsNewRoute
   '/dashboard/(with-sidebar)/check-ins/': typeof DashboardwithSidebarCheckInsIndexRoute
 }
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/dashboard/settings'
     | '/dashboard/'
+    | '/dashboard/check-ins/$checkInId'
     | '/dashboard/check-ins/new'
     | '/dashboard/check-ins'
   fileRoutesByTo: FileRoutesByTo
@@ -123,6 +134,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/dashboard/settings'
     | '/dashboard'
+    | '/dashboard/check-ins/$checkInId'
     | '/dashboard/check-ins/new'
     | '/dashboard/check-ins'
   id:
@@ -134,6 +146,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/dashboard/(with-sidebar)/settings'
     | '/dashboard/(with-sidebar)/'
+    | '/dashboard/(with-sidebar)/check-ins/$checkInId'
     | '/dashboard/(with-sidebar)/check-ins/new'
     | '/dashboard/(with-sidebar)/check-ins/'
   fileRoutesById: FileRoutesById
@@ -211,12 +224,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardwithSidebarCheckInsNewRouteImport
       parentRoute: typeof DashboardwithSidebarRouteRoute
     }
+    '/dashboard/(with-sidebar)/check-ins/$checkInId': {
+      id: '/dashboard/(with-sidebar)/check-ins/$checkInId'
+      path: '/check-ins/$checkInId'
+      fullPath: '/dashboard/check-ins/$checkInId'
+      preLoaderRoute: typeof DashboardwithSidebarCheckInsCheckInIdRouteImport
+      parentRoute: typeof DashboardwithSidebarRouteRoute
+    }
   }
 }
 
 interface DashboardwithSidebarRouteRouteChildren {
   DashboardwithSidebarSettingsRoute: typeof DashboardwithSidebarSettingsRoute
   DashboardwithSidebarIndexRoute: typeof DashboardwithSidebarIndexRoute
+  DashboardwithSidebarCheckInsCheckInIdRoute: typeof DashboardwithSidebarCheckInsCheckInIdRoute
   DashboardwithSidebarCheckInsNewRoute: typeof DashboardwithSidebarCheckInsNewRoute
   DashboardwithSidebarCheckInsIndexRoute: typeof DashboardwithSidebarCheckInsIndexRoute
 }
@@ -225,6 +246,8 @@ const DashboardwithSidebarRouteRouteChildren: DashboardwithSidebarRouteRouteChil
   {
     DashboardwithSidebarSettingsRoute: DashboardwithSidebarSettingsRoute,
     DashboardwithSidebarIndexRoute: DashboardwithSidebarIndexRoute,
+    DashboardwithSidebarCheckInsCheckInIdRoute:
+      DashboardwithSidebarCheckInsCheckInIdRoute,
     DashboardwithSidebarCheckInsNewRoute: DashboardwithSidebarCheckInsNewRoute,
     DashboardwithSidebarCheckInsIndexRoute:
       DashboardwithSidebarCheckInsIndexRoute,

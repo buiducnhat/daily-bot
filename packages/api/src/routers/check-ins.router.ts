@@ -26,6 +26,27 @@ export const checkInsRouter = {
       return configs;
     }),
 
+  get: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .handler(async ({ input }) => {
+      const config = await db.query.standupConfigs.findFirst({
+        where: (standups, { eq }) => eq(standups.id, input.id),
+        with: {
+          participants: {
+            with: {
+              discordUser: true,
+            },
+          },
+        },
+      });
+
+      if (!config) {
+        throw new Error("Check-in not found");
+      }
+
+      return config;
+    }),
+
   create: publicProcedure
     .input(
       z.object({

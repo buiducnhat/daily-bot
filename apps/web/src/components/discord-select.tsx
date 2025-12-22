@@ -38,10 +38,10 @@ export function ChannelSelect({
             : isLoading
               ? "Loading..."
               : "Select Channel"}
-          <IconChevronDown className="ml-2 h-4 w-4 opacity-50" />
+          <IconChevronDown />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="h-[300px] w-[300px] overflow-y-auto">
+      <DropdownMenuContent>
         {channels?.map((channel) => (
           <DropdownMenuItem
             key={channel.id}
@@ -123,13 +123,10 @@ export function ParticipantSelect({
             variant="outline"
           >
             {isLoading ? "Loading members..." : "Add Participants"}
-            <IconChevronDown className="ml-2 h-4 w-4 opacity-50" />
+            <IconChevronDown />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="start"
-          className="h-[300px] w-[300px] overflow-y-auto"
-        >
+        <DropdownMenuContent align="start">
           {members?.map((member) => (
             <DropdownMenuCheckboxItem
               checked={selectedIds.has(member.id)}

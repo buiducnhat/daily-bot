@@ -17,11 +17,11 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { orpc } from "@/lib/orpc";
 
-export const Route = createFileRoute("/dashboard/(with-sidebar)/check-ins/new")(
-  {
-    component: NewCheckInPage,
-  }
-);
+export const Route = createFileRoute(
+  "/dashboard/(with-sidebar)/check-ins/$checkInId"
+)({
+  component: EditCheckInPage,
+});
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -38,10 +38,17 @@ const formSchema = z.object({
   questions: z.array(z.string()),
 });
 
-function NewCheckInPage() {
+function EditCheckInPage() {
+  const { checkInId } = Route.useParams();
   const navigate = useNavigate();
   const { data: session } = authClient.useSession();
   const organizationId = session?.session.activeOrganizationId;
+
+  const { data: checkIn, isLoading: isLoadingCheckIn } = useQuery(
+    orpc.checkIns.get.queryOptions({
+      input: { id: Number(checkInId) },
+    })
+  );
 
   const { data: channels, isLoading: isLoadingChannels } = useQuery(
     orpc.discord.getGuildChannels.queryOptions({
@@ -57,21 +64,10 @@ function NewCheckInPage() {
     })
   );
 
-  const { data: orgs } = authClient.useListOrganizations();
-  // Cast type to include discordGuildId since it's in our DB schema
-  const currentOrg = orgs?.find((o) => o.id === organizationId) as
-    | {
-        id: string;
-        name: string;
-        slug: string;
-        discordGuildId?: string | null;
-      }
-    | undefined;
-
-  const createMutation = useMutation(
-    orpc.checkIns.create.mutationOptions({
+  const updateMutation = useMutation(
+    orpc.checkIns.update.mutationOptions({
       onSuccess: () => {
-        toast.success("Check-in created");
+        toast.success("Check-in updated");
         navigate({ to: "/dashboard/check-ins" });
       },
       onError: (err) => {
@@ -82,34 +78,24 @@ function NewCheckInPage() {
 
   const form = useForm({
     defaultValues: {
-      name: "",
-      cron: "0 9 * * 1-5",
-      channelId: "",
-      participants: [] as { id: string; username: string }[],
-      questions: [
-        "What did you do yesterday?",
-        "What will you do today?",
-        "Blockers?",
-      ],
+      name: checkIn?.name ?? "",
+      cron: checkIn?.cron ?? "0 9 * * 1-5",
+      channelId: checkIn?.channelId ?? "",
+      participants:
+        checkIn?.participants.map((p) => ({
+          id: p.discordUser.discordId,
+          username: p.discordUser.username,
+        })) ?? [],
+      questions: checkIn?.questions ?? [],
     },
-
     validators: {
       onChange: formSchema,
     },
     onSubmit: async ({ value }) => {
-      if (!organizationId) {
-        return;
-      }
-      if (!currentOrg?.discordGuildId) {
-        toast.error("Please connect Discord in Settings first.");
-        return;
-      }
-
-      await createMutation.mutateAsync({
-        organizationId,
+      await updateMutation.mutateAsync({
+        id: Number(checkInId),
         name: value.name,
         cron: value.cron,
-        guildId: currentOrg.discordGuildId,
         channelId: value.channelId,
         questions: value.questions,
         participants: value.participants,
@@ -117,7 +103,7 @@ function NewCheckInPage() {
     },
   });
 
-  if (!organizationId) {
+  if (isLoadingCheckIn || !checkIn) {
     return <div>Loading...</div>;
   }
 
@@ -129,22 +115,8 @@ function NewCheckInPage() {
             <IconChevronLeft />
           </Button>
         </Link>
-        <h1 className="font-bold text-2xl">Create New Check-in</h1>
+        <h1 className="font-bold text-2xl">Edit Check-in</h1>
       </div>
-
-      {!currentOrg?.discordGuildId && (
-        <div
-          className="mb-6 border-yellow-500 border-l-4 bg-yellow-100 p-4 text-yellow-700"
-          role="alert"
-        >
-          <p>
-            Warning: No Discord server linked.{" "}
-            <Link className="font-bold underline" to="/dashboard/settings">
-              Go to Settings
-            </Link>
-          </p>
-        </div>
-      )}
 
       <form
         className="max-w-xl space-y-4"
@@ -246,6 +218,7 @@ function NewCheckInPage() {
               </Field>
             )}
           </form.Field>
+
           <form.Field mode="array" name="questions">
             {(field) => (
               <Field>
@@ -300,11 +273,8 @@ function NewCheckInPage() {
           selector={(state) => [state.canSubmit, state.isSubmitting]}
         >
           {([canSubmit, isSubmitting]) => (
-            <Button
-              disabled={!(canSubmit && currentOrg?.discordGuildId)}
-              type="submit"
-            >
-              {isSubmitting ? "Creating..." : "Create Check-in"}
+            <Button disabled={!canSubmit} type="submit">
+              {isSubmitting ? "Saving..." : "Save Changes"}
             </Button>
           )}
         </form.Subscribe>
