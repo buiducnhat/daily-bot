@@ -5,7 +5,8 @@ import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./schema/index";
 
 const client = createClient({
-  url: env.DATABASE_URL || "",
+  url: env.DATABASE_URL,
+  authToken: env.DATABASE_TOKEN,
 });
 
 export const db = drizzle({ client, schema });

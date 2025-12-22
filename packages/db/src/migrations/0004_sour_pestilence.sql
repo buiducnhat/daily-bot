@@ -1,1 +1,0 @@
-ALTER TABLE `organizations` ADD `discord_guild_id` text;

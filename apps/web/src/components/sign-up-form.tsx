@@ -1,3 +1,4 @@
+import { IconBrandDiscordFilled } from "@tabler/icons-react";
 import { useForm } from "@tanstack/react-form";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -169,6 +170,22 @@ export default function SignUpForm() {
               )}
             </form.Subscribe>
           </form>
+
+          <div className="mt-4">
+            <Button
+              className="w-full"
+              onClick={() =>
+                authClient.signIn.social({
+                  provider: "discord",
+                  callbackURL: window.location.origin,
+                })
+              }
+              variant="outline"
+            >
+              <IconBrandDiscordFilled />
+              Sign In with Discord
+            </Button>
+          </div>
 
           <div className="mt-4 text-center text-sm">
             Already have an account?{" "}

@@ -49,6 +49,7 @@ CREATE TABLE `organizations` (
 	`slug` text NOT NULL,
 	`logo` text,
 	`created_at` integer NOT NULL,
+	`discord_guild_id` text,
 	`metadata` text
 );
 --> statement-breakpoint
@@ -93,4 +94,57 @@ CREATE TABLE `verifications` (
 	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL
 );
 --> statement-breakpoint
-CREATE INDEX `verifications_identifier_idx` ON `verifications` (`identifier`);
+CREATE INDEX `verifications_identifier_idx` ON `verifications` (`identifier`);--> statement-breakpoint
+CREATE TABLE `checkin_configs` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`organization_id` text NOT NULL,
+	`name` text NOT NULL,
+	`cron` text NOT NULL,
+	`guild_id` text NOT NULL,
+	`channel_id` text NOT NULL,
+	`questions` text NOT NULL,
+	`is_active` integer DEFAULT true,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (`organization_id`) REFERENCES `organizations`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `checkin_participants` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`checkin_config_id` integer NOT NULL,
+	`discord_user_id` integer NOT NULL,
+	FOREIGN KEY (`checkin_config_id`) REFERENCES `checkin_configs`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`discord_user_id`) REFERENCES `discord_users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `checkin_responses` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`checkin_config_id` integer NOT NULL,
+	`discord_user_id` integer NOT NULL,
+	`date` text NOT NULL,
+	`answers` text NOT NULL,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (`checkin_config_id`) REFERENCES `checkin_configs`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`discord_user_id`) REFERENCES `discord_users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `checkin_sessions` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`checkin_config_id` integer NOT NULL,
+	`discord_user_id` integer NOT NULL,
+	`questions` text NOT NULL,
+	`answers` text NOT NULL,
+	`current_step_index` integer DEFAULT 0 NOT NULL,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (`checkin_config_id`) REFERENCES `checkin_configs`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`discord_user_id`) REFERENCES `discord_users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `discord_users` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`discord_id` text NOT NULL,
+	`username` text NOT NULL,
+	`is_active` integer DEFAULT true,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `discord_users_discord_id_unique` ON `discord_users` (`discord_id`);

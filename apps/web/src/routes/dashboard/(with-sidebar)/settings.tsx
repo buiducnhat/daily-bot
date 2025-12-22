@@ -1,8 +1,10 @@
 import { env } from "@daily-bot/env/web";
 import NiceModal from "@ebay/nice-modal-react";
+import { IconBrandDiscordFilled } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { BaseAlertDialog } from "@/components/base-alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -98,13 +100,14 @@ function SettingsPage() {
                 have "Manage Server" permissions on the server you want to
                 connect.
               </p>
-              <button
-                className="rounded bg-indigo-600 px-4 py-2 font-medium text-white transition-colors hover:bg-indigo-700"
+              <Button
+                className="bg-indigo-600! text-white transition-colors hover:bg-indigo-700!"
                 onClick={handleManualConnect}
                 type="button"
               >
+                <IconBrandDiscordFilled />
                 Connect Discord Server
-              </button>
+              </Button>
             </div>
           )}
 

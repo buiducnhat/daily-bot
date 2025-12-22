@@ -1,12 +1,14 @@
 import {
   IconDotsVertical,
   IconEdit,
+  IconExclamationCircle,
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -60,17 +62,15 @@ function CheckInsPage() {
 
         <div className="flex gap-2">
           {!currentOrg?.discordGuildId && (
-            <div
-              className="mr-4 flex items-center border-yellow-500 border-l-4 bg-yellow-100 p-2 text-sm text-yellow-700"
-              role="alert"
-            >
-              <p>
-                Warning: No Discord server linked.{" "}
-                <Link className="font-bold underline" to="/dashboard/settings">
+            <Alert className="border-amber-400 bg-amber-400/20 py-1 dark:border-amber-700">
+              <IconExclamationCircle className="stroke-amber-400 dark:stroke-amber-600" />
+              <AlertTitle className="flex gap-2 text-amber-700 dark:text-amber-600">
+                No Discord server linked
+                <Link className="underline" to="/dashboard/settings">
                   Settings
                 </Link>
-              </p>
-            </div>
+              </AlertTitle>
+            </Alert>
           )}
           <Link to="/dashboard/check-ins/new">
             <Button disabled={!currentOrg?.discordGuildId}>
