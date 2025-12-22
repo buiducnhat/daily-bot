@@ -21,7 +21,7 @@ export async function setupCron() {
 async function refreshCronJobs() {
   try {
     // Fetch all active configs
-    const configs = await db.query.standupConfigs.findMany({
+    const configs = await db.query.checkInConfigs.findMany({
       where: (configs, { eq }) => eq(configs.isActive, true),
       with: {
         participants: {

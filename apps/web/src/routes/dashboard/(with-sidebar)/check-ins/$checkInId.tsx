@@ -21,6 +21,9 @@ export const Route = createFileRoute(
   "/dashboard/(with-sidebar)/check-ins/$checkInId"
 )({
   component: EditCheckInPage,
+  params: z.object({
+    checkInId: z.coerce.number(),
+  }),
 });
 
 const formSchema = z.object({
@@ -46,7 +49,7 @@ function EditCheckInPage() {
 
   const { data: checkIn, isLoading: isLoadingCheckIn } = useQuery(
     orpc.checkIns.get.queryOptions({
-      input: { id: Number(checkInId) },
+      input: { id: checkInId },
     })
   );
 

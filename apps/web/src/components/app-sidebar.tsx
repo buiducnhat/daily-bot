@@ -3,7 +3,6 @@
 import {
   IconCalendar,
   IconLayoutDashboard,
-  IconLayoutSidebar,
   IconPlus,
   IconSelector,
   IconSettings,
@@ -34,11 +33,12 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 const data = {
   navMain: [
     {
-      title: "Overview",
+      title: "Dashboard",
       url: "/dashboard",
       icon: IconLayoutDashboard,
     },
@@ -73,21 +73,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  size="lg"
-                >
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                    {activeOrg?.logo ? (
-                      <img
-                        alt={activeOrg.name}
-                        className="size-4"
-                        src={activeOrg.logo}
-                      />
-                    ) : (
-                      <IconLayoutSidebar className="size-4" />
-                    )}
-                  </div>
+                <SidebarMenuButton size="lg">
+                  <Avatar>
+                    <AvatarImage
+                      className="rounded-lg bg-white"
+                      src={activeOrg?.logo || "/logo.webp"}
+                    />
+                  </Avatar>
+
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">
                       {activeOrg?.name ?? "Select Organization"}

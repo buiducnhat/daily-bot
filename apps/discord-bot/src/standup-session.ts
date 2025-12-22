@@ -1,16 +1,11 @@
 import { db } from "@daily-bot/db";
-import { dailyStandups } from "@daily-bot/db/schema/daily-standup";
+import {
+  checkInResponses,
+  checkInSessions,
+} from "@daily-bot/db/schema/check-in";
 import { EmbedBuilder } from "discord.js";
+import { eq } from "drizzle-orm";
 import { client } from "./client";
-
-type StandupSession = {
-  questions: string[];
-  currentStepIndex: number; // 0-based index of the question being asked
-  answers: Record<string, string>; // Question -> Answer
-  standupConfigId?: number;
-};
-
-export const activeSessions = new Map<string, StandupSession>();
 
 const DEFAULT_QUESTIONS = [
   "What did you do yesterday?",
@@ -20,105 +15,163 @@ const DEFAULT_QUESTIONS = [
 
 export async function startStandup(
   discordUserId: string,
-  standupConfigId: number
+  checkInConfigId: number
 ) {
   try {
     const user = await client.users.fetch(discordUserId);
-    const config = await db.query.standupConfigs.findFirst({
-      where: (configs, { eq }) => eq(configs.id, standupConfigId),
+    const config = await db.query.checkInConfigs.findFirst({
+      where: (configs, { eq }) => eq(configs.id, checkInConfigId),
     });
 
     if (!config) {
-      console.error(`Standup config ${standupConfigId} not found`);
+      console.error(`Check-in config ${checkInConfigId} not found`);
       return;
     }
 
     const questions = config.questions || DEFAULT_QUESTIONS;
 
-    activeSessions.set(discordUserId, {
-      questions,
-      currentStepIndex: 0,
-      answers: {},
-      standupConfigId: config.id, // Store config ID in session
+    // Get DB user ID
+    const dbUser = await db.query.discordUsers.findFirst({
+      where: (users, { eq }) => eq(users.discordId, discordUserId),
     });
 
+    if (!dbUser) {
+      console.error(`Discord user ${discordUserId} not found in DB`);
+      return;
+    }
+
+    // Upsert session
+    const existingSession = await db.query.checkInSessions.findFirst({
+      where: (sessions, { eq }) => eq(sessions.discordUserId, dbUser.id),
+    });
+
+    if (existingSession) {
+      await db
+        .update(checkInSessions)
+        .set({
+          checkInConfigId: config.id,
+          questions,
+          answers: {},
+          currentStepIndex: 0,
+        })
+        .where(eq(checkInSessions.id, existingSession.id));
+    } else {
+      await db.insert(checkInSessions).values({
+        discordUserId: dbUser.id,
+        checkInConfigId: config.id,
+        questions,
+        answers: {},
+        currentStepIndex: 0,
+      });
+    }
+
     await user.send(
-      `Good morning! It's time for your daily check-in for **${config.name}**.\n\n1. ${questions[0]}`
+      `Good morning! It's time for your check-in for **${config.name}**.\n\n1. ${questions[0]}`
     );
   } catch (error) {
-    console.error(`Failed to start standup for ${discordUserId}`, error);
+    console.error(`Failed to start check-in for ${discordUserId}`, error);
   }
 }
 
 export async function handleStandupMessage(message: any) {
+  console.log(
+    "handleStandupMessage called",
+    message.author.id,
+    message.content
+  );
   const userId = message.author.id;
-  const session = activeSessions.get(userId);
 
-  if (!session) {
+  // Get DB user
+  const dbUser = await db.query.discordUsers.findFirst({
+    where: (users, { eq }) => eq(users.discordId, userId),
+  });
+
+  if (!dbUser) {
+    console.log("User not found in DB", userId);
     return;
   }
+
+  const session = await db.query.checkInSessions.findFirst({
+    where: (sessions, { eq }) => eq(sessions.discordUserId, dbUser.id),
+  });
+
+  if (!session) {
+    console.log("No active session found for user", dbUser.id);
+    return;
+  }
+
+  console.log(
+    "Session found",
+    session.id,
+    "Step:",
+    session.currentStepIndex,
+    "Questions:",
+    session.questions
+  );
 
   const currentQuestion = session.questions[session.currentStepIndex];
   if (!currentQuestion) {
     return;
   }
-  session.answers[currentQuestion] = message.content;
+
+  // Update answers
+  const newAnswers = { ...session.answers, [currentQuestion]: message.content };
 
   const nextIndex = session.currentStepIndex + 1;
 
   if (nextIndex < session.questions.length) {
-    session.currentStepIndex = nextIndex;
+    // Update session
+    await db
+      .update(checkInSessions)
+      .set({
+        answers: newAnswers,
+        currentStepIndex: nextIndex,
+      })
+      .where(eq(checkInSessions.id, session.id));
+
     const nextQuestion = session.questions[nextIndex];
     await message.author.send(`${nextIndex + 1}. ${nextQuestion}`);
   } else {
     // Finished
-    const dbUser = await db.query.discordUsers.findFirst({
-      where: (users, { eq }) => eq(users.discordId, userId),
+    const config = await db.query.checkInConfigs.findFirst({
+      where: (c, { eq }) => eq(c.id, session.checkInConfigId),
     });
 
-    if (dbUser && session.standupConfigId) {
-      // Fetch config to check for summary channel
-      const config = await db.query.standupConfigs.findFirst({
-        where: (c, { eq }) => eq(c.id, session.standupConfigId!),
-      });
+    await db.insert(checkInResponses).values({
+      discordUserId: dbUser.id,
+      checkInConfigId: session.checkInConfigId,
+      date: new Date().toISOString().substring(0, 10),
+      answers: newAnswers,
+    });
 
-      await db.insert(dailyStandups).values({
-        discordUserId: dbUser.id,
-        standupConfigId: session.standupConfigId,
-        date: new Date().toISOString().substring(0, 10),
-        answers: session.answers,
-      });
+    if (config?.channelId) {
+      const guild = client.guilds.cache.get(config.guildId);
+      if (guild) {
+        try {
+          const member = await guild.members.fetch(userId);
+          const channel = await guild.channels.fetch(config.channelId);
 
-      if (config?.channelId) {
-        const guild = client.guilds.cache.get(config.guildId);
-        if (guild) {
-          try {
-            const member = await guild.members.fetch(userId);
-            const channel = await guild.channels.fetch(config.channelId);
+          if (channel?.isTextBased()) {
+            const embed = new EmbedBuilder()
+              .setTitle(`Check-in - ${member?.displayName || dbUser.username}`)
+              .setDescription(`**${config.name}**`)
+              .setColor("#0099ff")
+              .setTimestamp();
 
-            if (channel?.isTextBased()) {
-              const embed = new EmbedBuilder()
-                .setTitle(
-                  `Daily Check-in - ${member?.displayName || dbUser.username}`
-                )
-                .setDescription(`**${config.name}**`)
-                .setColor("#0099ff")
-                .setTimestamp();
-
-              for (const [q, a] of Object.entries(session.answers)) {
-                embed.addFields({ name: q, value: a as string });
-              }
-
-              await channel.send({ embeds: [embed] });
+            for (const [q, a] of Object.entries(newAnswers)) {
+              embed.addFields({ name: q, value: a as string });
             }
-          } catch (e) {
-            console.error("Failed to post summary", e);
+
+            await channel.send({ embeds: [embed] });
           }
+        } catch (e) {
+          console.error("Failed to post summary", e);
         }
       }
     }
 
-    activeSessions.delete(userId);
+    // Clear session
+    await db.delete(checkInSessions).where(eq(checkInSessions.id, session.id));
     await message.author.send("Thanks! Your check-in has been recorded.");
   }
 }

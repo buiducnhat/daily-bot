@@ -105,7 +105,14 @@ function CheckInsPage() {
             <Card key={checkin.id}>
               <CardHeader className="flex items-center justify-between">
                 <div className="flex flex-col">
-                  <CardTitle>{checkin.name}</CardTitle>
+                  <CardTitle>
+                    <Link
+                      params={{ checkInId: checkin.id }}
+                      to={"/dashboard/check-ins/$checkInId"}
+                    >
+                      {checkin.name}
+                    </Link>
+                  </CardTitle>
                   <CardDescription>Schedule: {checkin.cron}</CardDescription>
                 </div>
                 <DropdownMenu>
@@ -118,7 +125,7 @@ function CheckInsPage() {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
                       <Link
-                        params={{ checkInId: checkin.id.toString() }}
+                        params={{ checkInId: checkin.id }}
                         to="/dashboard/check-ins/$checkInId"
                       >
                         <IconEdit /> Edit

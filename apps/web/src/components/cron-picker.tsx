@@ -79,9 +79,6 @@ export function CronPicker({ value, onChange, className }: CronPickerProps) {
     onChange(`${newMinute} ${newHour} * * ${sortedDays}`);
   };
 
-  const _currentMinute = MINUTES.find((m) => m.value === minute)
-    ? minute
-    : minute; // Support custom if exists?
   // If custom minute not in list, add it temporarily or specific handling?
   // Let's just trust valid cron for now.
 
