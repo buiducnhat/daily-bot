@@ -17,6 +17,7 @@ export const env = createEnv({
     DISCORD_TOKEN: z.string(),
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
+    REDIS_URL: z.url(),
   },
   runtimeEnv: process.env,
 });

@@ -24,7 +24,9 @@
     "elysia": "catalog:",
     "zod": "catalog:",
     "@daily-bot/db": "workspace:*",
+    "@daily-bot/discord": "workspace:*",
     "@daily-bot/env": "workspace:*",
+    "@daily-bot/kv": "workspace:*",
     "@daily-bot/auth": "workspace:*",
     "drizzle-orm": "catalog:"
   }

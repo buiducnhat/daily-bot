@@ -2,10 +2,10 @@ import { db } from "@daily-bot/db";
 import {
   checkInConfigs,
   checkInParticipants,
-  checkInSessions,
   discordUsers,
 } from "@daily-bot/db/schema/check-in";
-import { env } from "@daily-bot/env/server";
+import { client } from "@daily-bot/discord";
+import { cache } from "@daily-bot/kv";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { publicProcedure } from "../index";
@@ -103,77 +103,27 @@ export const checkInsRouter = {
       });
 
       for (const user of users) {
-        // Upsert session
-        const existingSession = await db.query.checkInSessions.findFirst({
-          where: (s, { eq }) => eq(s.discordUserId, user.id),
-        });
-
-        if (existingSession) {
-          await db
-            .update(checkInSessions)
-            .set({
-              checkInConfigId: config.id,
-              questions,
-              answers: {},
-              currentStepIndex: 0,
-            })
-            .where(eq(checkInSessions.id, existingSession.id));
-        } else {
-          await db.insert(checkInSessions).values({
-            discordUserId: user.id,
+        // Upsert session in Redis
+        const sessionKey = `checkin:session:${user.discordId}`;
+        await cache.set(
+          sessionKey,
+          {
             checkInConfigId: config.id,
             questions,
             answers: {},
             currentStepIndex: 0,
-          });
-        }
+            userId: user.id, // Internal DB ID
+          },
+          60 * 60 * 24 * 1000 // 1 day TTL
+        );
 
+        // ... inside handler ...
         // Send DM
         try {
-          // 1. Create DM Channel
-          const dmRes = await fetch(
-            "https://discord.com/api/v10/users/@me/channels",
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bot ${env.DISCORD_TOKEN}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ recipient_id: user.discordId }),
-            }
+          const discordUser = await client.users.fetch(user.discordId);
+          await discordUser.send(
+            `Good morning! It's time for your check-in for **${config.name}**.\n\n1. ${questions[0]}`
           );
-
-          if (!dmRes.ok) {
-            console.error(
-              `Failed to create DM for ${user.username}`,
-              await dmRes.text()
-            );
-            continue;
-          }
-
-          const dmChannel = (await dmRes.json()) as { id: string };
-
-          // 2. Send Message
-          const msgRes = await fetch(
-            `https://discord.com/api/v10/channels/${dmChannel.id}/messages`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bot ${env.DISCORD_TOKEN}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                content: `Good morning! It's time for your check-in for **${config.name}**.\n\n1. ${questions[0]}`,
-              }),
-            }
-          );
-
-          if (!msgRes.ok) {
-            console.error(
-              `Failed to send message to ${user.username}`,
-              await msgRes.text()
-            );
-          }
         } catch (e) {
           console.error(`Failed to remind ${user.username}`, e);
         }

@@ -1,6 +1,6 @@
 import { db } from "@daily-bot/db";
 import cron from "node-cron";
-import { startStandup } from "./standup-session";
+import { startStandup } from "./check-in-session";
 
 // Map to store active cron jobs: configId -> { task, cronSchedule }
 const activeJobs = new Map<

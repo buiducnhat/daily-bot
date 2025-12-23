@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "5ddaa6ea-0760-4649-91b2-6e39a183dcc6",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "857fb1e8-9f11-4f2a-ba60-8e2693b3b273",
+  "prevId": "5ddaa6ea-0760-4649-91b2-6e39a183dcc6",
   "tables": {
     "accounts": {
       "name": "accounts",
@@ -816,86 +816,6 @@
         "checkin_responses_discord_user_id_discord_users_id_fk": {
           "name": "checkin_responses_discord_user_id_discord_users_id_fk",
           "tableFrom": "checkin_responses",
-          "tableTo": "discord_users",
-          "columnsFrom": ["discord_user_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "checkin_sessions": {
-      "name": "checkin_sessions",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "checkin_config_id": {
-          "name": "checkin_config_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "discord_user_id": {
-          "name": "discord_user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "questions": {
-          "name": "questions",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "answers": {
-          "name": "answers",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "current_step_index": {
-          "name": "current_step_index",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 0
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "checkin_sessions_checkin_config_id_checkin_configs_id_fk": {
-          "name": "checkin_sessions_checkin_config_id_checkin_configs_id_fk",
-          "tableFrom": "checkin_sessions",
-          "tableTo": "checkin_configs",
-          "columnsFrom": ["checkin_config_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "checkin_sessions_discord_user_id_discord_users_id_fk": {
-          "name": "checkin_sessions_discord_user_id_discord_users_id_fk",
-          "tableFrom": "checkin_sessions",
           "tableTo": "discord_users",
           "columnsFrom": ["discord_user_id"],
           "columnsTo": ["id"],

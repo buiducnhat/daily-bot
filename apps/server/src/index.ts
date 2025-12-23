@@ -3,6 +3,7 @@ import { appRouter } from "@daily-bot/api/routers/index";
 import { auth } from "@daily-bot/auth";
 import { db } from "@daily-bot/db";
 import { organizations } from "@daily-bot/db/schema/auth";
+import { startBot } from "@daily-bot/discord";
 import { env } from "@daily-bot/env/server";
 import { cors } from "@elysiajs/cors";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
@@ -12,6 +13,9 @@ import { RPCHandler } from "@orpc/server/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { eq } from "drizzle-orm";
 import { Elysia } from "elysia";
+
+// Start Discord Bot
+startBot();
 
 const rpcHandler = new RPCHandler(appRouter, {
   interceptors: [

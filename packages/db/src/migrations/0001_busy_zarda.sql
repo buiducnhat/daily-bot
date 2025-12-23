@@ -1,0 +1,1 @@
+DROP TABLE `checkin_sessions`;

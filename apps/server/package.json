@@ -13,6 +13,7 @@
     "@daily-bot/api": "workspace:*",
     "@daily-bot/auth": "workspace:*",
     "@daily-bot/db": "workspace:*",
+    "@daily-bot/discord": "workspace:*",
     "@daily-bot/env": "workspace:*",
     "@elysiajs/cors": "^1.3.3",
     "@orpc/openapi": "catalog:",

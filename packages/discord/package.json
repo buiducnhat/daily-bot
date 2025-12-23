@@ -1,0 +1,28 @@
+{
+  "name": "@daily-bot/discord",
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules"
+  },
+  "dependencies": {
+    "@daily-bot/db": "workspace:*",
+    "@daily-bot/env": "workspace:*",
+    "@daily-bot/kv": "workspace:*",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.45.1",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "@daily-bot/config": "workspace:*",
+    "@types/bun": "^1.1.13",
+    "@types/node": "^20.14.9",
+    "@types/node-cron": "^3.0.11",
+    "typescript": "^5.5.3"
+  }
+}

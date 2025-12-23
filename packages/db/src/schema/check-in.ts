@@ -49,24 +49,6 @@ export const checkInResponses = sqliteTable("checkin_responses", {
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const checkInSessions = sqliteTable("checkin_sessions", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  checkInConfigId: integer("checkin_config_id")
-    .references(() => checkInConfigs.id, { onDelete: "cascade" })
-    .notNull(),
-  discordUserId: integer("discord_user_id")
-    .references(() => discordUsers.id, { onDelete: "cascade" })
-    .notNull(),
-  questions: text("questions", { mode: "json" }).notNull().$type<string[]>(),
-  answers: text("answers", { mode: "json" })
-    .notNull()
-    .$type<Record<string, string>>(),
-  currentStepIndex: integer("current_step_index").notNull().default(0),
-  updatedAt: text("updated_at")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
-});
-
 export const checkInConfigsRelations = relations(
   checkInConfigs,
   ({ many }) => ({
