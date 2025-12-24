@@ -9,9 +9,16 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     tailwindcss(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+        filter: ({ path }) =>
+          !(path.startsWith("/dashboard") || path.startsWith("/auth")),
+        crawlLinks: true,
+      },
+    }),
     viteReact(),
     devtools(),
-    tanstackStart(),
   ],
   envDir: "../../",
   build: {

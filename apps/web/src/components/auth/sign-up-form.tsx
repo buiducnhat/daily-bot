@@ -26,7 +26,6 @@ export default function SignUpForm() {
     navigate({
       to: "/dashboard/create-organization",
     });
-    toast.success("Sign up successful");
   };
 
   const form = useForm({

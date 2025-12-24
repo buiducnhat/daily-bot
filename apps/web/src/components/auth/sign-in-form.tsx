@@ -35,7 +35,6 @@ export default function SignInForm() {
     navigate({
       to: "/dashboard",
     });
-    toast.success("Sign in successful");
   };
 
   const form = useForm({
