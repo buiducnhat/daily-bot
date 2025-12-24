@@ -1,6 +1,7 @@
 import { Roles } from "@daily-bot/auth";
-import { ORPCError, os } from "@orpc/server";
+import { ORPCError, os, type RouterClient } from "@orpc/server";
 import type { Context } from "./context";
+import type { appRouter } from "./routers";
 
 export const o = os.$context<Context>();
 
@@ -29,5 +30,7 @@ const requireAdmin = o.middleware(({ context, next }) => {
 });
 
 export const protectedProcedure = publicProcedure.use(requireAuth);
-
 export const adminProcedure = protectedProcedure.use(requireAdmin);
+
+export type AppRouter = typeof appRouter;
+export type AppRouterClient = RouterClient<typeof appRouter>;

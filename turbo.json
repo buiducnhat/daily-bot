@@ -17,6 +17,10 @@
       "cache": false,
       "persistent": true
     },
+    "compile": {
+      "cache": false,
+      "persistent": true
+    },
     "db:push": {
       "cache": false,
       "persistent": true

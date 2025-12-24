@@ -14,4 +14,9 @@ export default defineConfig({
     devtools(),
   ],
   envDir: "../../",
+  build: {
+    rollupOptions: {
+      external: ["zlib-sync"],
+    },
+  },
 });
