@@ -23,6 +23,7 @@ import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
+  ssr: true,
 });
 
 function HomeComponent() {

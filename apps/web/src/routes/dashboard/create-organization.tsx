@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
-export const Route = createFileRoute("/create-organization")({
+export const Route = createFileRoute("/dashboard/create-organization")({
   component: CreateOrganizationPage,
 });
 

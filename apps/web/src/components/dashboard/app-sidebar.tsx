@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 import { Link, useLocation } from "@tanstack/react-router";
 import type * as React from "react";
-import { NavUser } from "@/components/nav-user";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +33,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { NavUser } from "./nav-user";
 
 const data = {
   navMain: [
@@ -130,7 +130,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="gap-2 p-2">
-                  <Link to="/create-organization">
+                  <Link to="/dashboard/create-organization">
                     <div className="flex size-6 items-center justify-center rounded-md border">
                       <IconPlus className="size-4" />
                     </div>

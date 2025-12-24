@@ -60,7 +60,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
       { rel: "icon", href: "/favicon.ico" },
     ],
   }),
-
   component: RootDocument,
 });
 

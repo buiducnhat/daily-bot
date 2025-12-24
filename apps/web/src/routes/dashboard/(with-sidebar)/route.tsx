@@ -1,29 +1,17 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { AnimatedThemeToggler } from "@/components/animated-theme-toggler";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { getUser } from "@/functions/get-user";
 
 export const Route = createFileRoute("/dashboard/(with-sidebar)")({
-  component: DashboardLayout,
-  beforeLoad: async () => {
-    const session = await getUser();
-    return { session };
-  },
-  loader: ({ context }) => {
-    if (!context.session) {
-      throw redirect({
-        to: "/auth/sign-in",
-      });
-    }
-  },
+  component: DashboardWithSideBarLayout,
 });
 
-function DashboardLayout() {
+function DashboardWithSideBarLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
