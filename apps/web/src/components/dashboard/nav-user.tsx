@@ -41,8 +41,12 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               size="lg"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage alt={user.name} src={user.image} />
+              <Avatar className="size-8 rounded-lg after:rounded-lg">
+                <AvatarImage
+                  alt={user.name}
+                  className="rounded-lg"
+                  src={user.image}
+                />
                 <AvatarFallback className="rounded-lg">
                   {user.name.charAt(0)}
                 </AvatarFallback>
@@ -62,8 +66,12 @@ export function NavUser({
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage alt={user.name} src={user.image} />
+                <Avatar className="size-8 rounded-lg after:rounded-lg">
+                  <AvatarImage
+                    alt={user.name}
+                    className="rounded-lg"
+                    src={user.image}
+                  />
                   <AvatarFallback className="rounded-lg">
                     {user.name.charAt(0)}
                   </AvatarFallback>
@@ -77,7 +85,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <IconSparkles className="mr-2 size-4" />
+                <IconSparkles />
                 Upgrade to Pro
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -95,8 +103,8 @@ export function NavUser({
                 });
               }}
             >
-              <IconLogout className="mr-2 size-4" />
-              Log out
+              <IconLogout />
+              Sign Out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -1,5 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import slugify from "slugify";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -80,7 +81,11 @@ function CreateOrganizationPage() {
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
+                    onChange={(e) => {
+                      field.handleChange(e.target.value);
+                      const slug = `${slugify(e.target.value, { lower: true })}-${Math.random().toString(36).slice(2, 7)}`;
+                      form.setFieldValue("slug", slug);
+                    }}
                     placeholder="My awesome team"
                     value={field.state.value}
                   />
