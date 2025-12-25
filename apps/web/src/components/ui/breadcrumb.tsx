@@ -18,7 +18,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
   return (
     <ol
       className={cn(
-        "flex flex-wrap items-center gap-1.5 break-words text-muted-foreground text-sm",
+        "wrap-break-word flex flex-wrap items-center gap-1.5 text-muted-foreground text-sm",
         className
       )}
       data-slot="breadcrumb-list"
@@ -57,6 +57,7 @@ function BreadcrumbLink({
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
+    // biome-ignore lint/a11y/useFocusableInteractive: <>
     <span
       aria-current="page"
       aria-disabled="true"

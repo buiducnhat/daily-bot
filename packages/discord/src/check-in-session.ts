@@ -10,13 +10,13 @@ const DEFAULT_QUESTIONS = [
   "Any blockers?",
 ];
 
-type CheckInSession = {
+interface CheckInSession {
   checkInConfigId: number;
   questions: string[];
   answers: Record<string, string>;
   currentStepIndex: number;
   userId: number; // DB user ID
-};
+}
 
 export async function startStandup(
   discordUserId: string,

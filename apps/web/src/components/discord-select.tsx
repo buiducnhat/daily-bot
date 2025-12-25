@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-type ChannelSelectProps = {
+interface ChannelSelectProps {
   channels: { id: string; name: string }[] | undefined;
   value: string;
   onValueChange: (value: string) => void;
   isLoading?: boolean;
-};
+}
 
 export function ChannelSelect({
   channels,
@@ -64,14 +64,14 @@ export function ChannelSelect({
   );
 }
 
-type ParticipantSelectProps = {
+interface ParticipantSelectProps {
   members:
     | { id: string; username: string; avatar: string | null }[]
     | undefined;
   value: { id: string; username: string }[];
   onValueChange: (value: { id: string; username: string }[]) => void;
   isLoading?: boolean;
-};
+}
 
 export function ParticipantSelect({
   members,

@@ -15,10 +15,10 @@ import { Toaster } from "@/components/ui/sonner";
 import type { orpc } from "@/lib/orpc";
 import appCss from "../index.css?url";
 
-export type RouterAppContext = {
+export interface RouterAppContext {
   orpc: typeof orpc;
   queryClient: QueryClient;
-};
+}
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({

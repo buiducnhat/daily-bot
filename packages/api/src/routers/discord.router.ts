@@ -6,13 +6,13 @@ import { protectedProcedure } from "../index";
 
 const DISCORD_API_URL = "https://discord.com/api";
 
-type DiscordGuild = {
+interface DiscordGuild {
   id: string;
   name: string;
   icon: string | null;
   owner: boolean;
   permissions: string;
-};
+}
 
 export const discordRouter = {
   listUserGuilds: protectedProcedure.handler(async ({ context }) => {

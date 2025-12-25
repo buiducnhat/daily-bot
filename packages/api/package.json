@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@orpc/server": "catalog:",
-    "@orpc/client": "^1.10.0",
+    "@orpc/client": "catalog:",
     "@orpc/openapi": "catalog:",
     "@orpc/zod": "catalog:",
     "elysia": "catalog:",

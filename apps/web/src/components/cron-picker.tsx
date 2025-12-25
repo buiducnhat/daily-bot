@@ -9,11 +9,11 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 
-type CronPickerProps = {
+interface CronPickerProps {
   value?: string;
   onChange: (value: string) => void;
   className?: string;
-};
+}
 
 const HOURS = Array.from({ length: 24 }, (_, i) => ({
   value: i.toString(),

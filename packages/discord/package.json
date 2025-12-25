@@ -14,14 +14,12 @@
     "@daily-bot/env": "workspace:*",
     "@daily-bot/kv": "workspace:*",
     "discord.js": "^14.16.3",
-    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.45.1",
     "node-cron": "^3.0.3"
   },
   "devDependencies": {
     "@daily-bot/config": "workspace:*",
-    "@types/bun": "^1.1.13",
-    "@types/node": "^20.14.9",
+    "@types/bun": "catalog:",
     "@types/node-cron": "^3.0.11",
     "typescript": "^5.5.3"
   }

@@ -7,9 +7,9 @@ import { flushSync } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type Props = {
+interface Props {
   className?: string;
-};
+}
 
 export const AnimatedThemeToggler = ({ className }: Props) => {
   const { theme, setTheme } = useTheme();

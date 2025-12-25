@@ -24,8 +24,7 @@
   },
   "devDependencies": {
     "typescript": "^5.8.2",
-    "@types/bun": "^1.2.6",
-    "tsdown": "^0.17.2",
+    "@types/bun": "catalog:",
     "@daily-bot/config": "workspace:*"
   }
 }

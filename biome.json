@@ -3,7 +3,6 @@
   "files": {
     "ignoreUnknown": false,
     "includes": [
-      "**",
       "!**/.next",
       "!**/dist",
       "!**/.turbo",
@@ -19,8 +18,7 @@
       "!**/.alchemy",
       "!**/.svelte-kit",
       "!**/wrangler.jsonc",
-      "!**/.source",
-      "!apps/web/src/components/ui/*.tsx"
+      "!**/.source"
     ]
   },
   "extends": ["ultracite/core", "ultracite/react"],

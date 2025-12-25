@@ -125,7 +125,7 @@ function HomeComponent() {
           </div>
 
           {/* Abstract Background Element */}
-          <div className="-translate-x-1/2 -z-10 pointer-events-none absolute top-0 left-1/2 h-full w-full max-w-7xl overflow-hidden opacity-30">
+          <div className="pointer-events-none absolute top-0 left-1/2 -z-10 h-full w-full max-w-7xl -translate-x-1/2 overflow-hidden opacity-30">
             <div className="absolute top-[-10%] left-[20%] h-[500px] w-[500px] rounded-full bg-primary/20 blur-[100px]" />
             <div className="absolute top-[20%] right-[20%] h-[400px] w-[400px] rounded-full bg-blue-500/20 blur-[100px]" />
           </div>
@@ -206,7 +206,7 @@ function HomeComponent() {
               </div>
 
               {/* Decorative circles */}
-              <div className="-translate-x-1/2 -translate-y-1/2 absolute top-0 left-0 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+              <div className="absolute top-0 left-0 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/10 blur-3xl" />
               <div className="absolute right-0 bottom-0 h-64 w-64 translate-x-1/2 translate-y-1/2 rounded-full bg-white/10 blur-3xl" />
             </div>
           </div>
