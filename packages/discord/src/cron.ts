@@ -1,12 +1,9 @@
 import { db } from "@daily-bot/db";
-import cron from "node-cron";
+import { CronJob } from "cron";
 import { startStandup } from "./check-in-session";
 
 // Map to store active cron jobs: configId -> { task, cronSchedule }
-const activeJobs = new Map<
-  number,
-  { task: cron.ScheduledTask; cronSchedule: string }
->();
+const activeJobs = new Map<number, { task: CronJob; cronSchedule: string }>();
 
 export async function setupCron() {
   console.log("Starting dynamic cron scheduler...");
@@ -54,14 +51,22 @@ async function refreshCronJobs() {
           console.log(`Scheduling new check-in for ${config.name}`);
         }
 
-        const task = cron.schedule(config.cron, async () => {
-          console.log(`Running check-in for ${config.name}`);
-          for (const participant of config.participants) {
-            if (participant.discordUser.isActive) {
-              await startStandup(participant.discordUser.discordId, config.id);
+        const task = new CronJob(
+          config.cron,
+          async () => {
+            console.log(`Running check-in for ${config.name}`);
+            for (const participant of config.participants) {
+              if (participant.discordUser.isActive) {
+                await startStandup(
+                  participant.discordUser.discordId,
+                  config.id
+                );
+              }
             }
-          }
-        });
+          },
+          null, // onComplete
+          true // start
+        );
 
         activeJobs.set(config.id, { task, cronSchedule: config.cron });
       }

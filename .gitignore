@@ -55,3 +55,8 @@ temp
 # END Ruler Generated Files
 
 local.db
+
+.claude/
+plans/
+CLAUDE.md
+.repomixignore
